@@ -1,0 +1,3 @@
+name = OC Template Overwrites
+description = overwrites with own templates for openinghours,file entity modules.
+core = 7.x

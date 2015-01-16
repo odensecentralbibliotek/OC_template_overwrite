@@ -1,0 +1,24 @@
+<?php
+/*
+ * Hooks into select modules template registry entries and swaps out with 
+ * a position inside this module instead of their original module/templates.
+ * allowing us to overwrite the backend functionality without including
+ * templates in the admin theme.
+ *  
+ */
+function oc_template_overwrites_theme_registry_alter(&$theme_registry)
+{
+    if(isset($theme_registry["opening_hours_admin"]))
+    {
+        $OC_template_repo = drupal_get_path('module','oc_template_overwrites') . "/templates";
+        $theme_registry["opening_hours_admin"]["path"] = $OC_template_repo;
+    }
+    if(isset($theme_registry["file_entity"]))
+    {
+        $OC_template_repo = "file_entity";
+        $ModuleTemplatePath = drupal_get_path('module','oc_template_overwrites') . "/templates";
+        $theme_registry["file_entity"]["template"] = $OC_template_repo;
+        $theme_registry["file_entity"]["path"] =  $ModuleTemplatePath;	
+    }
+}
+
