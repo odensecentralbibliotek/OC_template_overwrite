@@ -1,3 +1,6 @@
 name = OC Template Overwrites
 description = overwrites with own templates for openinghours,file entity modules.
 core = 7.x
+configure = admin/settings/oc_template_overwrites
+files[] = oc_template_overwrites.module
+files[] = oc_template_overwrites.admin.inc

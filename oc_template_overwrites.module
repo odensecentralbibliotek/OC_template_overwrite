@@ -21,4 +21,41 @@ function oc_template_overwrites_theme_registry_alter(&$theme_registry)
         $theme_registry["file_entity"]["path"] =  $ModuleTemplatePath;	
     }
 }
+/**
+ * Implements hook_permission().
+ */
+function oc_template_overwrites_permission() {
+  return array(
+    'administer oc_template_overwrites' => array(
+      'title' => t('Administrer oc_template_overwrites'),
+      'description' => t('Giver adgang til configuere oc tempate overwrites'),
+
+    )
+  );
+}
+function  oc_template_overwrites_menu() {
+  $items = array();
+  $items['admin/settings/oc_template_overwrites'] = array(
+    'title' => 'OC Overwrites',
+    'description' => 'Configuration af oc digitalpost modul',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('oc_template_overwrites_admin'),
+    'access arguments' => array('administer oc_template_overwrites'),
+    'file' => 'oc_template_overwrites.admin.inc'
+   );
+  
+  return $items;
+}
+/*
+ * Hook places where we want to inject.
+ */
+function oc_template_overwrites_preprocess_html(&$page)
+{
+    //Add javascript if we are on frontpage.
+    if(drupal_is_front_page() && variable_get('Place2book_front_ticket_status', 0) == 1) //The setting has been enabled.
+    {
+        $Path = drupal_get_path('module', 'oc_template_overwrites') . "/js/p2b_frontpagestatus.js";
+        drupal_add_js($Path);
+    }
+}
 
