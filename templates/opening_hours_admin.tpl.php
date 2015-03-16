@@ -9,7 +9,7 @@
 ?>
  <script>
 jQuery(function($) {
-    jQuery( "#datepicker" ).datepicker();
+    jQuery( "#datepicker" ).datepicker({maxDate: "+10Y" });
     jQuery('#CalenderSelecter').click(function(){
         $('#datepicker').show().focus().hide(); //hack to make datepicker input field hidden and still working.
         jQuery("#datepicker").datepicker( "show" );
