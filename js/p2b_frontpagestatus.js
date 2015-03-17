@@ -10,13 +10,16 @@ jQuery( document ).ready(function() {
             method: "POST",
             url: "/ding/place2book/ticketinfo/ajax/raw/" + Nid,
           }).done(function( msg ) {
-              var test = msg.data.headers["available-tickets"];
-              if(msg.data.headers["available-tickets"] == 0)
+              if(msg.data != null)
               {
-                var obj = jQuery('.field-content:contains("'+ msg.nid +'")').parent().parent();
-                var heading = obj.find('.heading a');
-                heading[0].innerHTML = Drupal.t("UDSOLGT: ") + "<br/>" + heading[0].innerHTML;
+                if(msg.data.headers["available-tickets"] == 0)
+                {
+                  var obj = jQuery('.field-content:contains("'+ msg.nid +'")').parent().parent();
+                  var heading = obj.find('.heading a');
+                  heading[0].innerHTML = Drupal.t("UDSOLGT: ") + "<br/>" + heading[0].innerHTML;
+                }
               }
+              
             });
     })
 });
