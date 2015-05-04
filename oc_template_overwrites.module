@@ -58,4 +58,13 @@ function oc_template_overwrites_preprocess_html(&$page)
         drupal_add_js($Path);
     }
 }
+function oc_template_overwrites_views_post_execute(&$view) {
 
+      if ($view->name == "ding_event" && $view->current_display == "ding_event_floated_list") {
+          $config = array(
+            'nysfyn_link' => variable_get('nysfyn_home_page', ''),
+            'is_active' => variable_get('nysfyn_badge_enabled', 0)
+           );
+          drupal_add_js(array('oc_template_overwrites' => $config), 'setting');
+      }
+}

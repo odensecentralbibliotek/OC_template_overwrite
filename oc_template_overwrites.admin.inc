@@ -7,7 +7,10 @@
  */
 function oc_template_overwrites_admin()
 {
-  $form = array();
+  $form = array(
+    '#tree' => TRUE,
+  );
+  
   $form['Place2book_front_ticket_status'] = array(
     '#type' => 'radios',
     '#title' => t('Tilføj Place2book Billet udsolgt status.'),
@@ -16,5 +19,26 @@ function oc_template_overwrites_admin()
     '#required' => FALSE,
     '#options' => array(t('Slået Fra'),t('Slået Til')),
   );
+  
+  $form['nysfyn_badge_enabled'] = array(
+    '#type' => 'radios',
+    '#title' => t('Slå nysgerig fyn badge til og fra på arrangemants siden.'),
+    '#default_value' => variable_get('nysfyn_badge_enabled', 0),
+    '#description' => t("nysgerig fyn badge"),
+    '#required' => FALSE,
+    '#options' => array(t('Slået Fra.'),t('Slået Til.')),
+  );
+  if(variable_get('nysfyn_badge_enabled', 0) == 1)
+  {
+        $form['nysfyn_home_page'] = array(
+            '#type' => 'textfield',
+            '#default_value' => variable_get('nysfyn_home_page', ''),
+            '#title' => t('klub side:'),
+            '#attributes' => array(
+                'placeholder' => t('Link til nysgerrig fyn informations side.'),
+            ),
+        );
+  }
+
   return system_settings_form($form);
 }
