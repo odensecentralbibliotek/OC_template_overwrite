@@ -39,6 +39,27 @@ function oc_template_overwrites_admin()
             ),
         );
   }
+    $form['google_translate_enabled'] = array(
+    '#type' => 'radios',
+    '#title' => t('Google translate.'),
+    '#default_value' => variable_get('google_translate_enabled', 0),
+    '#description' => t("Google translate service"),
+    '#required' => FALSE,
+    '#options' => array(t('Slået Fra.'),t('Slået Til.')),
+  );
+  if(variable_get('google_translate_enabled', 0) == 1)
+  {
+        $form['google_translate_languages'] = array(
+            '#type' => 'textfield',
+            '#default_value' => variable_get('google_translate_languages', ''),
+            '#title' => t('Tilladte google translate sporg'),
+            '#default_value' => 'da,de,en,es,nl,no',
+            '#attributes' => array(
+                'placeholder' => t('Tilladte google translate sporg'),
+            ),
+        );
+  }
+    
 
   return system_settings_form($form);
 }
