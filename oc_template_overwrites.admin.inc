@@ -13,7 +13,7 @@ function oc_template_overwrites_admin()
   
   $form['Place2book_front_ticket_status'] = array(
     '#type' => 'radios',
-    '#title' => t('Tilføj Place2book Billet udsolgt status.'),
+    '#title' => t('Tilføj Place2book Billet status.'),
     '#default_value' => variable_get('Place2book_front_ticket_status', 0),
     '#description' => t("The maximum number of links to display in the block."),
     '#required' => FALSE,
