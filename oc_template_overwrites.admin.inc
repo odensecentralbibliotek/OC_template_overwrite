@@ -56,6 +56,7 @@ function oc_template_overwrites_admin()
             '#attributes' => array(
                 'placeholder' => t('Tilladte google translate sporg'),
             ),
+            '#description' => t('En større list med sprog koder kan findes <a href="http://meta.wikimedia.org/wiki/Template:List_of_language_names_ordered_by_code">her</a>'),
         );
   }
     
