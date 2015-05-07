@@ -53,7 +53,6 @@ function oc_template_overwrites_admin()
             '#type' => 'textfield',
             '#default_value' => variable_get('google_translate_languages', ''),
             '#title' => t('Tilladte google translate sporg'),
-            '#default_value' => 'da,de,en,es,nl,no',
             '#attributes' => array(
                 'placeholder' => t('Tilladte google translate sporg'),
             ),
