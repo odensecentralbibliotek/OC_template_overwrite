@@ -52,6 +52,8 @@ function  oc_template_overwrites_menu() {
 function oc_template_overwrites_preprocess_html(&$page)
 {
     //Add javascript if we are on frontpage.
+    $Path = drupal_get_path('module', 'oc_template_overwrites') . '/js/ting_tablesorter_parsers.js';
+    drupal_add_js($Path);
     if(drupal_is_front_page() && variable_get('Place2book_front_ticket_status', 0) == 1) //The setting has been enabled.
     {
         $Path = drupal_get_path('module', 'oc_template_overwrites') . "/js/p2b_frontpagestatus.js";
@@ -64,8 +66,16 @@ function oc_template_overwrites_preprocess_html(&$page)
             'google_translate_languages' => variable_get('google_translate_languages', 'da,de,en,es,nl,no')
            );
           drupal_add_js(array('oc_template_overwrites' => $config), 'setting');
-}
-function oc_template_overwrites_views_post_execute(&$view) {
-
-   
+          
+ // Setup IE meta tag to force IE rendering mode
+  $meta_ie_render_engine = array(
+    '#type' => 'html_tag',
+    '#tag' => 'meta',
+    '#attributes' => array(
+      'content' =>  'IE=Edge',
+      'http-equiv' => 'X-UA-Compatible',
+    )
+  );
+  // Add header meta tag for IE to head
+  drupal_add_html_head($meta_ie_render_engine, 'meta_ie_render_engine');
 }
