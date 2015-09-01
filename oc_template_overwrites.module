@@ -66,7 +66,19 @@ function oc_template_overwrites_preprocess_html(&$page)
             'google_translate_languages' => variable_get('google_translate_languages', 'da,de,en,es,nl,no')
            );
           drupal_add_js(array('oc_template_overwrites' => $config), 'setting');
-          
+  
+  if(drupal_is_front_page())
+    {
+    $meta_description = array(
+    '#type' => 'html_tag',
+    '#tag' => 'meta',
+    '#attributes' => array(     
+      'content' => variable_get('description_meta'),
+      'name' =>  'description',
+    )
+  );
+      drupal_add_html_head($meta_description, 'meta_description');  
+    }        
  // Setup IE meta tag to force IE rendering mode
   $meta_ie_render_engine = array(
     '#type' => 'html_tag',

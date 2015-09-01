@@ -11,6 +11,16 @@ function oc_template_overwrites_admin()
     '#tree' => TRUE,
   );
   
+  $form['description_meta'] = array(
+      '#type' => 'textfield',
+      '#default_value' => variable_get('description_meta', ''),
+      '#title' => t('Angiv meta beskrivelse.'),
+      '#attributes' => array(
+          'placeholder' => t('En beskrivelse omkring hjemmesiden der dukker op ved søgeresultat i google '),
+      ),
+      '#description' => t('En beskrivelse omkring hjemmesiden der dukker op ved søgeresultat i google'),
+  );
+
   $form['Place2book_front_ticket_status'] = array(
     '#type' => 'radios',
     '#title' => t('Tilføj Place2book Billet status.'),
@@ -59,7 +69,7 @@ function oc_template_overwrites_admin()
             '#description' => t('En større list med sprog koder kan findes <a href="http://meta.wikimedia.org/wiki/Template:List_of_language_names_ordered_by_code">her</a>'),
         );
   }
-    
+   
 
   return system_settings_form($form);
 }
