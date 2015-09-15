@@ -30,6 +30,15 @@ function oc_template_overwrites_admin()
     '#options' => array(t('Slået Fra'),t('Slået Til')),
   );
   
+  $form['nemid_button'] = array(
+    '#type' => 'radios',
+    '#title' => t('Tilføj nemid knap.'),
+    '#default_value' => variable_get('nemid_button', 0),
+    '#description' => t("Tilføj nemid knap på login boksen."),
+    '#required' => FALSE,
+    '#options' => array(t('Slået Fra'),t('Slået Til')),
+  );
+  
   $form['nysfyn_badge_enabled'] = array(
     '#type' => 'radios',
     '#title' => t('Slå nysgerig fyn badge til og fra på arrangemants siden.'),
