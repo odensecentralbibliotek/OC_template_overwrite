@@ -1,4 +1,18 @@
 <?php
+
+function oc_template_overwrites_nemid_form_callback ($form, &$form_state) {
+   $current_path = $_SESSION['current_path']  ;
+   $response = array(
+    '#type' => 'ajax',
+    '#commands' => array(),
+  );
+
+  $form['nemid']['#markup'] = '<a href="/wayf/consume?destination=' . $current_path . '" >Login via NemID </a>'
+      . '<div class="ding-wayf-create-user"><a class="create-user-link" href="/wayf/create-user/before-page">Opret bruger</a></div>';
+  $response['#commands'][] = ajax_command_ding_popup('oc_template_overwrites', t('Login via NemID'), $form['nemid']['#markup'], array('refresh' => FALSE));
+
+  return $response;
+}
 /*
  * Hooks into select modules template registry entries and swaps out with 
  * a position inside this module instead of their original module/templates.
@@ -73,7 +87,19 @@ function oc_template_overwrites_preprocess_html(&$page)
             'google_translate_languages' => variable_get('google_translate_languages', 'da,de,en,es,nl,no')
            );
           drupal_add_js(array('oc_template_overwrites' => $config), 'setting');
-          
+  
+  if(drupal_is_front_page())
+    {
+    $meta_description = array(
+    '#type' => 'html_tag',
+    '#tag' => 'meta',
+    '#attributes' => array(     
+      'content' => variable_get('description_meta'),
+      'name' =>  'description',
+    )
+  );
+      drupal_add_html_head($meta_description, 'meta_description');  
+    }        
  // Setup IE meta tag to force IE rendering mode
   $meta_ie_render_engine = array(
     '#type' => 'html_tag',
