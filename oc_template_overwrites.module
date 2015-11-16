@@ -118,10 +118,14 @@ function oc_template_overwrites_form_alter(&$form, &$form_state, $form_id) {
     $form['#validate'][] = 'oc_template_overwrites_validate_user_phone';
 
   }
+  elseif($form_id == 'user_login_block')
+  {
+      $form['#validate'][] = 'oc_template_validate_login_user_id_length';
+  }
 } 
 /*
  * Validate the phone number used for SMS notifcations
- * Prevent phone number with area codes and 
+ * Prevent phone number with area codes and enforce 8 char length.
  */
 function oc_template_overwrites_validate_user_phone($form, &$form_state)
 {
@@ -138,6 +142,17 @@ function oc_template_overwrites_validate_user_phone($form, &$form_state)
     }
     if ($errors) {
         form_set_error_multiple('profile_provider_alma][field_alma_mobile_phone', $errors);
+    }
+}
+/*
+ * Login: Validate that a user id can max be 10 chars long.
+ */
+function oc_template_validate_login_user_id_length($form, &$form_state)
+{
+    $user_id_length = strlen($form_state['values']['name']);
+    if($user_id_length > 10)
+    {
+        form_set_error('name_length_validate',t('User ID can max be 10 chars long.'));
     }
 }
 /*
