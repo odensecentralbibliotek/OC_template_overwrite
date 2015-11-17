@@ -47,6 +47,9 @@ function oc_template_overwrites_permission() {
     )
   );
 }
+/*
+ * 
+ */
 function  oc_template_overwrites_menu() {
   $items = array();
   $items['admin/settings/oc_template_overwrites'] = array(
@@ -72,6 +75,10 @@ function oc_template_overwrites_preprocess_html(&$page)
     {
         $Path = drupal_get_path('module', 'oc_template_overwrites') . "/js/p2b_frontpagestatus.js";
         drupal_add_js($Path);
+    }
+    if (arg(0) == 'node' && arg(1) == 'add' || arg(2) == 'edit') {
+        $path = drupal_get_path('module', 'oc_template_overwrites');  
+        drupal_add_js($path . '/js/oc_material_descriptions.js',array('weight' => 999));
     }
     $config = array(
             'nysfyn_link' => variable_get('nysfyn_home_page', ''),
@@ -104,4 +111,54 @@ function oc_template_overwrites_preprocess_html(&$page)
   );
   // Add header meta tag for IE to head
   drupal_add_html_head($meta_ie_render_engine, 'meta_ie_render_engine');
+}
+function oc_template_overwrites_form_alter(&$form, &$form_state, $form_id) {
+  if ($form_id == 'user_profile_form') {
+    //dpm($form['#validate']);
+    $form['#validate'][] = 'oc_template_overwrites_validate_user_phone';
+
+  }
+  elseif($form_id == 'user_login_block')
+  {
+      $form['#validate'][] = 'oc_template_validate_login_user_id_length';
+  }
+} 
+/*
+ * Validate the phone number used for SMS notifcations
+ * Prevent phone number with area codes and enforce 8 char length.
+ */
+function oc_template_overwrites_validate_user_phone($form, &$form_state)
+{
+    $errors = array();
+    $phone_number = $form_state['values']['profile_provider_alma']['field_alma_mobile_phone']['und']['0']['value'];
+    if(!ctype_digit($phone_number))
+    {
+        array_push($errors,t('Phone number must be numeric'));
+    }
+    $phone_lenght = strlen($phone_number);
+    if($phone_lenght != 8)
+    {
+        array_push($errors,t('Phone number must be excactly 8 chars'));
+    }
+    if ($errors) {
+        form_set_error_multiple('profile_provider_alma][field_alma_mobile_phone', $errors);
+    }
+}
+/*
+ * Login: Validate that a user id can max be 10 chars long.
+ */
+function oc_template_validate_login_user_id_length($form, &$form_state)
+{
+    $user_id_length = strlen($form_state['values']['name']);
+    if($user_id_length > 10)
+    {
+        form_set_error('name_length_validate',t('User ID can max be 10 chars long.'));
+    }
+}
+/*
+ * Helper to set multiple errors for 1 field.
+ * http://drupal.stackexchange.com/questions/8327/how-to-set-multiple-error-messages-with-form-set-error
+ */
+function form_set_error_multiple($name = NULL, $messages = '', $limit_validation_errors = NULL) {
+  return form_set_error($name, implode('<br/>', $messages));
 }
