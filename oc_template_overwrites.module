@@ -112,6 +112,9 @@ function oc_template_overwrites_preprocess_html(&$page)
   // Add header meta tag for IE to head
   drupal_add_html_head($meta_ie_render_engine, 'meta_ie_render_engine');
 }
+/*
+ * Contains various form alterations.
+ */
 function oc_template_overwrites_form_alter(&$form, &$form_state, $form_id) {
   if ($form_id == 'user_profile_form') {
     //dpm($form['#validate']);
@@ -120,9 +123,40 @@ function oc_template_overwrites_form_alter(&$form, &$form_state, $form_id) {
   }
   elseif($form_id == 'user_login_block')
   {
-      $form['#validate'][] = 'oc_template_validate_login_user_id_length';
+      //$form['#validate'][] = 'oc_template_validate_login_user_id_length';
+  }
+  elseif($form_id == 'ding_news_node_form')
+  {
+      $form['#validate'][] = 'oc_template_validate_material_description_list';
+      $form['#attached']['css'] = array(
+        drupal_get_path('module', 'oc_template_overwrites') . '/css/material_descriptions.css',
+      );
+      foreach($form['field_ding_news_material_descrip']['und'] as $index => $elem)
+      {
+          if(is_array($elem) && isset($elem['#field_name']) && 
+                  $elem['#field_name'] == 'field_ding_news_material_descrip' 
+                  && isset($elem['value']) && is_array($elem['value'])  )
+          {
+              if($form['field_ding_news_material_descrip']['und'][$index]['value']['#default_value'] == "")
+              {
+                  $form['field_ding_news_material_descrip']['und'][$index]['value']['#default_value'] = '.';
+              }
+          }
+      }
   }
 } 
+/*
+ * Make sure the material description lists does not grow indefinit.
+ */
+function oc_template_validate_material_description_list($form, &$form_state)
+{
+    $field_index = sizeof($form_state['values']['field_ding_news_material_descrip']['und']);
+    if(isset($form_state['values']['field_ding_news_material_descrip']['und'][$field_index-2]['value']) &&
+       $form_state['values']['field_ding_news_material_descrip']['und'][$field_index-2]['value'] == ".")
+    {
+        unset($form_state['values']['field_ding_news_material_descrip']['und'][$field_index-2]);
+    }
+}
 /*
  * Validate the phone number used for SMS notifcations
  * Prevent phone number with area codes and enforce 8 char length.
@@ -153,6 +187,16 @@ function oc_template_validate_login_user_id_length($form, &$form_state)
     if($user_id_length > 10)
     {
         form_set_error('name_length_validate',t('User ID can max be 10 chars long.'));
+    }
+}
+/*
+ * Fix Default value for material descriptions. 
+ */
+function oc_template_widget_form_alter(&$element, &$form_state, $context)
+{
+    if(true)
+    {
+        
     }
 }
 /*
