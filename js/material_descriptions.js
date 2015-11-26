@@ -25,14 +25,23 @@
                 var description_children = $('.field-name-field-ding-news-material-descrip').find('.form-item').length;
                 if (material_children >= description_children)
                 {
-                    $('.field-name-field-ding-news-material-descrip').find('input[type="submit"]').mousedown();
+                    setTimeout(function(){
+                        $('.field-name-field-ding-news-material-descrip').find('input[type="submit"]').mousedown();
+                    },650);
                 }
             });
             /*
              *  Add wysiwyg abillity for material descriptions.
              */
-            var inputs = $('#edit-field-ding-news-material-descrip table input');
+           
+            var inputs = $('#edit-field-ding-news-material-descrip table input:not(.field-add-more-submit)');
+            inputs.unbind('click');
             inputs.click(function (e) {
+                if(CKEDITOR.instances.mat_descrip_editor != undefined)
+                {
+                    CKEDITOR.instances.mat_descrip_editor.destroy(); // ensure death.
+                }
+                debugger;
                 //Define global so we can access the value later in the dialog.
                 current_material_description_input = $(e.currentTarget);
 
