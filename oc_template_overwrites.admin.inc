@@ -58,7 +58,7 @@ function oc_template_overwrites_admin()
             ),
         );
   }
-    $form['google_translate_enabled'] = array(
+  $form['google_translate_enabled'] = array(
     '#type' => 'radios',
     '#title' => t('Google translate.'),
     '#default_value' => variable_get('google_translate_enabled', 0),
@@ -78,7 +78,14 @@ function oc_template_overwrites_admin()
             '#description' => t('En større list med sprog koder kan findes <a href="http://meta.wikimedia.org/wiki/Template:List_of_language_names_ordered_by_code">her</a>'),
         );
   }
-   
-
+  
+  $form['oc_material_descriptions_enabled'] = array(
+    '#type' => 'radios',
+    '#title' => t('Material descriptions'),
+    '#default_value' => variable_get('oc_material_descriptions_enabled', 0),
+    '#description' => t("Materiale beskrivelser slået til."),
+    '#required' => FALSE,
+    '#options' => array(t('Slået Fra.'),t('Slået Til.')),
+  ); 
   return system_settings_form($form);
 }
