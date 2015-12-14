@@ -87,5 +87,23 @@ function oc_template_overwrites_admin()
     '#required' => FALSE,
     '#options' => array(t('Slået Fra.'),t('Slået Til.')),
   ); 
+  
+   $form['oc_survey_xact_enabled'] = array(
+    '#type' => 'radios',
+    '#title' => t('Survey xact'),
+    '#default_value' => variable_get('oc_survey_xact_enabled', 0),
+    '#description' => t("Slå survey xact til"),
+    '#required' => FALSE,
+    '#options' => array(t('Slået Fra.'),t('Slået Til.')),
+  ); 
+   $form['oc_survey_xact_survey_id'] = array(
+            '#type' => 'textfield',
+            '#default_value' => variable_get('oc_survey_xact_survey_id', ''),
+            '#title' => t('Survey link'),
+            '#attributes' => array(
+                'placeholder' => t('Survey id..'),
+            ),
+            '#description' => t('survey xact'),
+        );
   return system_settings_form($form);
 }

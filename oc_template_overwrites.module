@@ -111,6 +111,24 @@ function oc_template_overwrites_preprocess_html(&$page)
   );
   // Add header meta tag for IE to head
   drupal_add_html_head($meta_ie_render_engine, 'meta_ie_render_engine');
+  if(variable_get('oc_survey_xact_enabled', 0))
+  {
+       $link_id = variable_get('oc_survey_xact_survey_id', '');
+      drupal_add_css("https://popin.survey-xact.dk/popin/popin.css", 'external');
+      drupal_add_css(drupal_get_path('module', 'oc_template_overwrites') . "/css/oc_survey_xact.css");
+      //drupal_add_js(drupal_get_path('theme', 'latto_odense') . "/js/popintest.js");
+      drupal_add_js("https://popin.survey-xact.dk/popin/popin.js", 'external');
+      drupal_add_js("https://popin.survey-xact.dk/dynjs/".$link_id."/popin.js", 'external');
+      drupal_add_js("https://popin.survey-xact.dk/cookies.js" , 'external');
+      
+      /*
+       * Add js setting.
+       */
+      drupal_add_js(array('oc_template_overwrites' => array('xact_survey_enabled' => variable_get('oc_survey_xact_enabled', 0))), 'setting');
+      drupal_add_js(array('oc_template_overwrites' => array('xact_survey_id' => $link_id)), 'setting');
+      
+      drupal_add_js(drupal_get_path('module', 'oc_template_overwrites') ."/js/oc_survey_xact.js");
+  }
 }
 /*
  * Contains various form alterations.
