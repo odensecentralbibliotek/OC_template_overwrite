@@ -13,7 +13,7 @@ jQuery(document).ready(function($) {
             window.xact_surveyURL='https://www.survey-xact.dk/LinkCollector?key=' + Drupal.settings.oc_template_overwrites.xact_survey_id;
             window.xact_surveyKey= Drupal.settings.oc_template_overwrites.xact_survey_id;
             window.xact_probability = 1;
-            window.xact_baseURL = 'http://www.survey-xact.dk';
+            window.xact_baseURL = 'https://www.survey-xact.dk';
             window.xact_language = "da";
             xact_startPopIn();   
         }       
