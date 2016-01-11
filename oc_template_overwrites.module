@@ -216,12 +216,20 @@ function oc_template_overwrites_validate_user_phone($form, &$form_state)
 {
     $errors = array();
     $phone_number = $form_state['values']['profile_provider_alma']['field_alma_mobile_phone']['und']['0']['value'];
+    /*
+     * Allow phone number field to be empty in case
+     * patrons dont want to attach phone number.
+     */
+    if($phone_number == "")
+    {
+        return;
+    }
     if(!ctype_digit($phone_number))
     {
         array_push($errors,t('Phone number must be numeric'));
     }
     $phone_lenght = strlen($phone_number);
-    if($phone_lenght != 8)
+    if($phone_lenght > 0 && $phone_lenght != 8)
     {
         array_push($errors,t('Phone number must be excactly 8 chars'));
     }
