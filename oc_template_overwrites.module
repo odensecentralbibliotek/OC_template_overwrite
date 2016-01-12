@@ -219,9 +219,14 @@ function oc_template_overwrites_validate_user_phone($form, &$form_state)
     /*
      * Allow phone number field to be empty in case
      * patrons dont want to attach phone number.
-     */
-    if($phone_number == "")
+     */	
+    if($phone_number == "" && $form['alma_user_sms']['#value'] == 0)
     {
+        return;
+    }
+    if($phone_number == "" && $form['alma_user_sms']['#value'] == 1)
+    {
+        form_set_error('profile_provider_alma][field_alma_mobile_phone',t('Cant use sms service without a phone number.'));
         return;
     }
     if(!ctype_digit($phone_number))
