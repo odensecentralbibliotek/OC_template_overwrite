@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 jQuery(document).ready(function($) {
-    debugger;
     try {
         if( Drupal.settings.oc_template_overwrites.xact_survey_enabled)
         {

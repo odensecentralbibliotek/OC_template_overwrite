@@ -33,15 +33,13 @@
             /*
              *  Add wysiwyg abillity for material descriptions.
              */
-           
             var inputs = $('#edit-field-ding-news-material-descrip table input:not(.field-add-more-submit)');
             inputs.unbind('click');
             inputs.click(function (e) {
                 if(CKEDITOR.instances.mat_descrip_editor != undefined)
                 {
-                    CKEDITOR.instances.mat_descrip_editor.destroy(); // ensure death.
+                   CKEDITOR.instances.mat_descrip_editor.destroy(); // ensure death.
                 }
-                debugger;
                 //Define global so we can access the value later in the dialog.
                 current_material_description_input = $(e.currentTarget);
 

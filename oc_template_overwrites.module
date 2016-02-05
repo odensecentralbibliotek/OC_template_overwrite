@@ -69,6 +69,12 @@ function  oc_template_overwrites_menu() {
 function oc_template_overwrites_preprocess_html(&$page)
 {
     //Add javascript if we are on frontpage.
+    global $user;
+    $cur_path = current_path();
+    if($cur_path == "user/" . $user->uid)
+    {
+       drupal_add_js(drupal_get_path('module', 'oc_template_overwrites') ."/js/user_profile_attached.js");
+    }
     $Path = drupal_get_path('module', 'oc_template_overwrites') . '/js/ting_tablesorter_parsers.js';
     drupal_add_js($Path);
     if(drupal_is_front_page() && variable_get('Place2book_front_ticket_status', 0) == 1) //The setting has been enabled.
@@ -137,7 +143,12 @@ function oc_template_overwrites_form_alter(&$form, &$form_state, $form_id) {
   if ($form_id == 'user_profile_form') {
     //dpm($form['#validate']);
     $form['#validate'][] = 'oc_template_overwrites_validate_user_phone';
-
+    /*
+    * Add JS
+    */
+     $form['#attached']['js'] = array(
+     drupal_get_path('module', 'oc_template_overwrites') . '/js/user_profile_attached.js',
+     );
   }
   elseif($form_id == 'ding_news_node_form')
   {
