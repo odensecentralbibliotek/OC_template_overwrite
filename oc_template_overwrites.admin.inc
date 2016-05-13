@@ -97,13 +97,21 @@ function oc_template_overwrites_admin()
     '#options' => array(t('Slået Fra.'),t('Slået Til.')),
   ); 
    $form['oc_survey_xact_survey_id'] = array(
-            '#type' => 'textfield',
-            '#default_value' => variable_get('oc_survey_xact_survey_id', ''),
-            '#title' => t('Survey link'),
-            '#attributes' => array(
-                'placeholder' => t('Survey id..'),
-            ),
-            '#description' => t('survey xact'),
-        );
+    '#type' => 'textfield',
+    '#default_value' => variable_get('oc_survey_xact_survey_id', ''),
+    '#title' => t('Survey link'),
+    '#attributes' => array(
+        'placeholder' => t('Survey id..'),
+    ),
+    '#description' => t('survey xact'),
+);
+   $form['oc_survey_bpi_buttons_enabled'] = array(
+    '#type' => 'radios',
+    '#title' => t('BPI'),
+    '#default_value' => variable_get('oc_survey_bpi_buttons_enabled', 0),
+    '#description' => t("OC bpi knapper"),
+    '#required' => FALSE,
+    '#options' => array(t('Slået Fra.'),t('Slået Til.')),
+  ); 
   return system_settings_form($form);
 }

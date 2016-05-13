@@ -139,6 +139,7 @@ function oc_template_overwrites_preprocess_html(&$page)
 /*
  * Contains various form alterations.
  */
+
 function oc_template_overwrites_form_alter(&$form, &$form_state, $form_id) {
   if ($form_id == 'user_profile_form') {
     //dpm($form['#validate']);
@@ -157,8 +158,8 @@ function oc_template_overwrites_form_alter(&$form, &$form_state, $form_id) {
        * it does now grow automaticly without connected materials.
        */
       $form['#submit'][] = 'oc_template_validate_material_description_list';
-      if(variable_get('oc_material_descriptions_enabled',0) && isset($form['field_ding_news_material_descrip']['und']))
-      {
+    if(variable_get('oc_material_descriptions_enabled',0) && isset($form['field_ding_news_material_descrip']['und']))
+    {
             $form['#attached']['css'] = array(
               drupal_get_path('module', 'oc_template_overwrites') . '/css/material_descriptions.css',
             );
@@ -185,9 +186,86 @@ function oc_template_overwrites_form_alter(&$form, &$form_state, $form_id) {
            $form['#attached']['css'] = array(
               drupal_get_path('module', 'oc_template_overwrites') . '/css/material_descriptions_disabled.css',
             );
-      } 
+      }
+      
+      /*
+       * Only add button if node is already created.
+       */
+       if(variable_get('oc_survey_bpi_buttons_enabled',0))
+       {
+         
+          if(isset($form['#node']->nid) && $form['#node']->field_bpi_workflow['und']['0']['value'] != 11)
+          {
+              
+              $form['actions']['submit2'] = array(
+                '#type' => 'submit', 
+                '#value' => t('Send til bpi'),
+                '#validate' => array('oc_template_overwrites_bpi_custom_syndicate'),
+                '#submit' => array('node_form_submit'),
+                '#weight' => 50
+              );
+          }
+          elseif(isset($form['#node']->nid))
+          {
+              $form['actions']['submit2'] = array(
+                '#type' => 'submit', 
+                '#value' => t('Slet fra bpi'),
+                '#validate' => array('oc_template_overwrites_bpi_custom_delete'),
+                '#submit' => array('node_form_submit'),
+                '#weight' => 50
+              );
+          }
+          array_unshift();
+        }
   }
-} 
+}
+function oc_template_overwrites_bpi_custom_syndicate(&$form, &$form_state)
+{
+    $form_state['values']['field_bpi_workflow']['und']['0']['workflow']['workflow_sid'] = 11;
+}
+function oc_template_overwrites_bpi_custom_delete(&$form, &$form_state)
+{
+    $form_state['values']['field_bpi_workflow']['und']['0']['workflow']['workflow_sid'] = 14;
+}
+/**
+ * Implements hook_entity_update().
+ *
+ */
+function oc_template_overwrites_entity_update($entity, $entity_type) {
+  /*if ($entity->type == 'ding_news') { //this is the entity like a node that has the workflow field
+//@todo: check for more checks if hook update is called during other entity update operations.
+    foreach ($entity->workflow_transitions as $key => $value) {
+      $field_name = $key;
+      $workflow = $value;
+      break; // There should only be one workflow at this point
+    }
+
+    //Example states. This can be fetched from else where.
+    //$creation = 1 // not used
+    $preview = 2;
+    $approved = 3;
+    $expired = 4;
+
+    //For clarity that the state change that triggers hook_entity_update is going to be the current sid after state change
+    $this_sid = $workflow->new_sid;
+
+    $timestamp = time();
+
+    // Check if the entity has been put into approved state manually
+    if ($this_sid == $approved) {
+
+      //Entity will expire after 30 days
+      $scheduled = strtotime('+30 day', $timestamp);
+      $comment = '';
+
+      $uid = 1; //Or use global $user, $user->uid
+
+      $scheduled_transition = new WorkflowScheduledTransition();
+      $scheduled_transition->setValues($entity_type, $entity, $field_name, $this_sid, $expired, $uid, $scheduled, $comment);
+      $scheduled_transition->save();
+    }
+  }*/
+}
 /*
  * Make sure the material description lists does not grow unintended beyond
  * the actual count of materials.
