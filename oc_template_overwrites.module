@@ -194,7 +194,7 @@ function oc_template_overwrites_form_alter(&$form, &$form_state, $form_id) {
        if(variable_get('oc_survey_bpi_buttons_enabled',0))
        {
          
-          if(isset($form['#node']->nid) && $form['#node']->field_bpi_workflow['und']['0']['value'] != 11)
+          if(isset($form['#node']->nid) && $form['#node']->field_bpi_workflow['und']['0']['value'] != variable_get('oc_bpi_send_to_state_sid',11))
           {
               
               $form['actions']['submit2'] = array(
@@ -221,11 +221,11 @@ function oc_template_overwrites_form_alter(&$form, &$form_state, $form_id) {
 }
 function oc_template_overwrites_bpi_custom_syndicate(&$form, &$form_state)
 {
-    $form_state['values']['field_bpi_workflow']['und']['0']['workflow']['workflow_sid'] = 11;
+    $form_state['values']['field_bpi_workflow']['und']['0']['workflow']['workflow_sid'] = variable_get('oc_bpi_send_to_state_sid',11);
 }
 function oc_template_overwrites_bpi_custom_delete(&$form, &$form_state)
 {
-    $form_state['values']['field_bpi_workflow']['und']['0']['workflow']['workflow_sid'] = 14;
+    $form_state['values']['field_bpi_workflow']['und']['0']['workflow']['workflow_sid'] = variable_get('oc_bpi_delete_state_sid',14);
 }
 /**
  * Implements hook_entity_update().

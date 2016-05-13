@@ -113,5 +113,23 @@ function oc_template_overwrites_admin()
     '#required' => FALSE,
     '#options' => array(t('Slået Fra.'),t('Slået Til.')),
   ); 
+    $form['oc_bpi_send_to_state_sid'] = array(
+    '#type' => 'textfield',
+    '#default_value' => variable_get('oc_bpi_send_to_state_sid', ''),
+    '#title' => t('Send to bpi SID'),
+    '#attributes' => array(
+        'placeholder' => t('Survey id..'),
+    ),
+    '#description' => t(''),
+);
+     $form['oc_bpi_delete_state_sid'] = array(
+    '#type' => 'textfield',
+    '#default_value' => variable_get('oc_bpi_delete_state_sid', ''),
+    '#title' => t('Delete from BPI SID'),
+    '#attributes' => array(
+        'placeholder' => t('sid'),
+    ),
+    '#description' => t(''),
+);
   return system_settings_form($form);
 }
