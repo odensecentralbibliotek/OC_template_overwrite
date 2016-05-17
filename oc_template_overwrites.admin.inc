@@ -163,7 +163,7 @@ function oc_template_overwrites_admin()
             '#description' => t(''),
         );
        $form['oc_custom_survey_teaser_html'] = array(
-            '#type' => 'textfield',
+            '#type' => 'textarea',
             '#default_value' => variable_get('oc_custom_survey_teaser_html', ''),
             '#title' => t('Survey teaser html'),
             '#attributes' => array(
