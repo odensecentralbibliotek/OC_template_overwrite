@@ -148,7 +148,7 @@ function oc_template_overwrites_preprocess_html(&$page)
       
       drupal_add_js(array('oc_template_overwrites' => array('oc_custom_survey_start_date' => strtotime(variable_get('oc_custom_survey_start_date',0)))), 'setting');
       drupal_add_js(array('oc_template_overwrites' => array('oc_custom_survey_end_date' => strtotime(variable_get('oc_custom_survey_end_date',0)))), 'setting');
-      
+      drupal_add_css(drupal_get_path('module', 'oc_template_overwrites') . "/css/jquery.dialog.overwrites.css");
   }
 }
 /*
