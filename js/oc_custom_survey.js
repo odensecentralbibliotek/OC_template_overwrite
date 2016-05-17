@@ -41,7 +41,7 @@ jQuery(document).ready(function($) {
         {
             if($('#oc_custom_survey_remember_opt_out').is(':checked'))
             {
-                 $.cookie('oc_custom_survey_dont_show_again', 'yes', { expires: 7, path: '/' });
+                 $.cookie('oc_custom_survey_dont_show_again', 'yes', { expires: 30, path: '/' });
             }
         }
 });
