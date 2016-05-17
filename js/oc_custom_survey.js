@@ -23,7 +23,7 @@ jQuery(document).ready(function($) {
             <div style="position:absolute;bottom:0px;"><label for="oc_custom_survey_remember_opt_out"><input style=" vertical-align: middle;" type="checkbox" id="oc_custom_survey_remember_opt_out"> Vis ikke igen</label></div>\
             </div>');
         
-                dynamicDialog.dialog({ title: Drupal.settings.oc_template_overwrites.oc_custom_survey_title,
+                dynamicDialog.dialog({ title: 'Brugerundersøgelse',
                     width: 450,
                     height: 300,
                     modal: true,
