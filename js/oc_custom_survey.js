@@ -27,13 +27,12 @@ jQuery(document).ready(function($) {
                     width: 450,
                     height: 300,
                     modal: true,
-                    buttons: [{ text: "Ja", click: function () { 
+                    buttons: [{ text: "Deltag", click: function () { 
                             user_survey_opt_out_set();
                             window.open(Drupal.settings.oc_template_overwrites.oc_custom_survey_link, '_blank');
                             $(this).dialog("close");
-                        } }, { text: "Nej", click: function () {
-                            user_survey_opt_out_set();
-                   
+                        } }, { text: "Deltag ikke", click: function () {
+                        user_survey_opt_out_set();
                         $(this).dialog("close"); } }]
                 });
         }
