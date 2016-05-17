@@ -122,7 +122,7 @@ function oc_template_overwrites_admin()
     ),
     '#description' => t(''),
 );
-     $form['oc_bpi_delete_state_sid'] = array(
+   $form['oc_bpi_delete_state_sid'] = array(
     '#type' => 'textfield',
     '#default_value' => variable_get('oc_bpi_delete_state_sid', ''),
     '#title' => t('Delete from BPI SID'),
@@ -130,6 +130,67 @@ function oc_template_overwrites_admin()
         'placeholder' => t('sid'),
     ),
     '#description' => t(''),
-);
+    );
+   /*
+    * Setings for the oc custom survey popup
+    */
+    $form['oc_custom_survey_enabled'] = array(
+    '#type' => 'radios',
+    '#title' => t('custom survey'),
+    '#default_value' => variable_get('oc_custom_survey_enabled', 0),
+    '#description' => t("oc custom survey popup"),
+    '#required' => FALSE,
+    '#options' => array(t('Slået Fra.'),t('Slået Til.')),
+  );
+  if(variable_get('oc_custom_survey_enabled', 0) == 1)
+  {
+       $form['oc_custom_survey_link'] = array(
+            '#type' => 'textfield',
+            '#default_value' => variable_get('oc_custom_survey_link', ''),
+            '#title' => t('Survey link'),
+            '#attributes' => array(
+                'placeholder' => t('Survey url'),
+            ),
+            '#description' => t(''),
+        );
+       $form['oc_custom_survey_title'] = array(
+            '#type' => 'textfield',
+            '#default_value' => variable_get('oc_custom_survey_title', ''),
+            '#title' => t('Survey teaser title'),
+            '#attributes' => array(
+                'placeholder' => t('Survey teaser title'),
+            ),
+            '#description' => t(''),
+        );
+       $form['oc_custom_survey_teaser_html'] = array(
+            '#type' => 'textfield',
+            '#default_value' => variable_get('oc_custom_survey_teaser_html', ''),
+            '#title' => t('Survey teaser html'),
+            '#attributes' => array(
+                'placeholder' => t('Survey teaser html'),
+            ),
+            '#description' => t(''),
+        );
+       $format = 'd-m-Y H:i';
+ 
+        $form['oc_custom_survey_start_date'] = array(
+           '#type' => 'date_popup', // types 'date_text' and 'date_timezone' are also supported. See .inc file.
+           '#title' => t('Survey start date'),
+           '#default_value' => variable_get('oc_custom_survey_start_date',date($format)), 
+           '#date_format' => $format,
+           '#date_label_position' => 'within', // See other available attributes and what they do in date_api_elements.inc
+           '#date_increment' => 15, // Optional, used by the date_select and date_popup elements to increment minutes and seconds.
+           '#date_year_range' => '-0:+1', // Optional, used to set the year range (back 3 years and forward 3 years is the default).
+        );
+        $form['oc_custom_survey_end_date'] = array(
+           '#type' => 'date_popup', // types 'date_text' and 'date_timezone' are also supported. See .inc file.
+           '#title' => t('Survey start date'),
+           '#default_value' => variable_get('oc_custom_survey_end_date',date($format)), 
+           '#date_format' => $format,
+           '#date_label_position' => 'within', // See other available attributes and what they do in date_api_elements.inc
+           '#date_increment' => 15, // Optional, used by the date_select and date_popup elements to increment minutes and seconds.
+           '#date_year_range' => '-0:+1', // Optional, used to set the year range (back 3 years and forward 3 years is the default).
+        );
+  }
   return system_settings_form($form);
 }
