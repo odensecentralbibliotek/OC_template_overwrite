@@ -12,13 +12,13 @@ jQuery(document).ready(function($) {
         var cur_date = new Date();
         var user_opt_out = $.cookie('oc_custom_survey_dont_show_again');
         //Add + infront of Date objects to compare as timestamps.
-        if(user_opt_out == undefined && +cur_date >= +start_date && +cur_date <= +end_date)
+        if(user_opt_out == undefined && cur_date >= start_date && cur_date <= end_date)
         {
             /*
             * Show survey teaser.
             */
             var dynamicDialog = $('<div id="oc_custom_survey_dialog">\
-            <h2>'+Drupal.settings.oc_template_overwrites.oc_custom_survey_title+'</h2>\
+            <h3>'+Drupal.settings.oc_template_overwrites.oc_custom_survey_title+'</h3>\
             <p>'+Drupal.settings.oc_template_overwrites.oc_custom_survey_teaser_html+'</p>\
             <div style="position:absolute;bottom:0px;"><label for="oc_custom_survey_remember_opt_out"><input style=" vertical-align: middle;" type="checkbox" id="oc_custom_survey_remember_opt_out"> Vis ikke igen</label></div>\
             </div>');
