@@ -18,7 +18,7 @@ jQuery(document).ready(function($) {
             * Show survey teaser.
             */
             var dynamicDialog = $('<div id="oc_custom_survey_dialog">\
-            <h3>'+Drupal.settings.oc_template_overwrites.oc_custom_survey_title+'</h3>\
+            <h3>'+Drupal.settings.oc_template_overwrites.oc_custom_survey_title+'</h3><br/>\
             <p>'+Drupal.settings.oc_template_overwrites.oc_custom_survey_teaser_html+'</p>\
             <div style="position:absolute;bottom:0px;"><label for="oc_custom_survey_remember_opt_out"><input style=" vertical-align: middle;" type="checkbox" id="oc_custom_survey_remember_opt_out"> Vis ikke igen</label></div>\
             </div>');
