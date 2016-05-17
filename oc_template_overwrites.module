@@ -138,7 +138,7 @@ function oc_template_overwrites_preprocess_html(&$page)
   /*
    * Insert needed data for custom surveys that are not created with survey xact.
    */
-  if(variable_get('oc_custom_survey_enabled',0))
+  if(variable_get('oc_custom_survey_enabled',0) && !path_is_admin(current_path()))
   {
       drupal_add_js(drupal_get_path('module', 'oc_template_overwrites') ."/js/oc_custom_survey.js");
       drupal_add_js(array('oc_template_overwrites' => array('oc_custom_survey_enabled' => variable_get('oc_custom_survey_enabled', 0))), 'setting');
