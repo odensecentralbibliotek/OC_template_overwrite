@@ -252,6 +252,7 @@ function oc_template_overwrites_bpi_custom_lokal_content(&$form, &$form_state)
 function oc_template_overwrites_bpi_custom_syndicate(&$form, &$form_state)
 {
     $form_state['values']['field_bpi_workflow']['und']['0']['workflow']['workflow_sid'] = variable_get('oc_bpi_send_to_state_sid',11);
+    array_unshift($form_state['submit_handlers'], 'bpi_form_workflow_transition_form_submit');
 }
 function oc_template_overwrites_bpi_custom_delete(&$form, &$form_state)
 {
