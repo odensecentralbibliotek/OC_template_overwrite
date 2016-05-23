@@ -221,7 +221,7 @@ function oc_template_overwrites_form_alter(&$form, &$form_state, $form_id) {
                 '#weight' => 50
               );
           }
-          elseif(isset($form['#node']->nid))
+          elseif(isset($form['#node']->nid) &&  && $form['#node']->field_bpi_workflow['und']['0']['value'] != variable_get('oc_bpi_crated_from_state_sid',0))
           {
               $form['actions']['submit2'] = array(
                 '#type' => 'submit', 
