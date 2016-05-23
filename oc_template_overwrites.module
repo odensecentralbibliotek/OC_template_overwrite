@@ -230,6 +230,18 @@ function oc_template_overwrites_form_alter(&$form, &$form_state, $form_id) {
                 '#weight' => 50
               );
           }
+          elseif(isset($_GET['bpi_id']))
+          {
+              /*
+               * Make sure we give correct state to content created from BPI.
+               */
+              if(variable_get('oc_bpi_crated_from_state_sid',0) != 0)
+              {
+                //$form['field_bpi_workflow']['und'][0]['workflow']['#default_value']  = variable_get('oc_bpi_crated_from_state_sid',0);
+                $form['field_bpi_workflow']['und'][0]['workflow']['workflow_sid']['#default_value']  = variable_get('oc_bpi_crated_from_state_sid',0);
+              }
+
+          }
         }
   }
 }

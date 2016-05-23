@@ -121,11 +121,20 @@ function oc_template_overwrites_admin()
         'placeholder' => t('Survey id..'),
     ),
     '#description' => t(''),
-);
+    );
    $form['oc_bpi_delete_state_sid'] = array(
     '#type' => 'textfield',
     '#default_value' => variable_get('oc_bpi_delete_state_sid', ''),
     '#title' => t('Delete from BPI SID'),
+    '#attributes' => array(
+        'placeholder' => t('sid'),
+    ),
+    '#description' => t(''),
+    );
+      $form['oc_bpi_crated_from_state_sid'] = array(
+    '#type' => 'textfield',
+    '#default_value' => variable_get('oc_bpi_crated_from_state_sid', ''),
+    '#title' => t('created from BPI SID'),
     '#attributes' => array(
         'placeholder' => t('sid'),
     ),
