@@ -209,7 +209,8 @@ function oc_template_overwrites_form_alter(&$form, &$form_state, $form_id) {
        */
        if(variable_get('oc_survey_bpi_buttons_enabled',0))
        {
-          if(isset($form['#node']->nid) && $form['#node']->field_bpi_workflow['und']['0']['value'] != variable_get('oc_bpi_send_to_state_sid',11))
+          if(isset($form['#node']->nid) && $form['#node']->field_bpi_workflow['und']['0']['value'] != variable_get('oc_bpi_send_to_state_sid',11)
+                  && $form['#node']->field_bpi_workflow['und']['0']['value'] != variable_get('oc_bpi_crated_from_state_sid',0))
           {
               
               $form['actions']['submit2'] = array(
