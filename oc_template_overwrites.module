@@ -209,6 +209,17 @@ function oc_template_overwrites_form_alter(&$form, &$form_state, $form_id) {
        */
        if(variable_get('oc_survey_bpi_buttons_enabled',0))
        {
+           if(is_array( $form['#attached']['css']))
+           {
+                $form['#attached']['css'][] = drupal_get_path('module', 'oc_template_overwrites') . '/css/bpi.css';
+           }
+           else
+           {
+               //Hide the descriptions
+                $form['#attached']['css'] = array(
+                   drupal_get_path('module', 'oc_template_overwrites') . '/css/bpi.css',
+                 );
+           }
           if(isset($form['#node']->nid) && $form['#node']->field_bpi_workflow['und']['0']['value'] != variable_get('oc_bpi_send_to_state_sid',11)
                   && $form['#node']->field_bpi_workflow['und']['0']['value'] != variable_get('oc_bpi_crated_from_state_sid',0)
                   && user_access('bpi push content'))
