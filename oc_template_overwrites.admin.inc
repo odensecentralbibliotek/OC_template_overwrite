@@ -201,5 +201,14 @@ function oc_template_overwrites_admin()
            '#date_year_range' => '-0:+1', // Optional, used to set the year range (back 3 years and forward 3 years is the default).
         );
   }
+  $form['oc_ding_news_lead_warning_limit'] = array(
+    '#type' => 'textfield',
+    '#default_value' => variable_get('oc_ding_news_lead_warning_limit', '150'),
+    '#title' => t('Ding news leard warning limit'),
+    '#attributes' => array(
+        'placeholder' => t('text size..'),
+    ),
+    '#description' => t(''),
+    );
   return system_settings_form($form);
 }

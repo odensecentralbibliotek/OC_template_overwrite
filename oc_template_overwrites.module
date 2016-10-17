@@ -173,6 +173,7 @@ function oc_template_overwrites_form_alter(&$form, &$form_state, $form_id) {
        * Ding news lead length warning
        */
       drupal_add_js(drupal_get_path('module', 'oc_template_overwrites') ."/js/ding_news_lead_warning.js");
+      drupal_add_js(array('oc_template_overwrites' => array('oc_ding_news_lead_limit' => variable_get('oc_ding_news_lead_warning_limit', 150))), 'setting');
       /*
        * Add submit handler to ensure if material description fields exists
        * it does now grow automaticly without connected materials.

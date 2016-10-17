@@ -8,14 +8,14 @@ jQuery(document).ready(function($) {
     /*
      * Create a counter showing how many letters the news lead has.
      */
-    $('#edit-field-ding-news-lead').find('.form-textarea-wrapper').append($('<div id="ding_news_lead_length" style="float:right;">150</div>'));
-    var startval = 150 - $('#edit-field-ding-news-lead').find('textarea').val().length;
+    $('#edit-field-ding-news-lead').find('.form-textarea-wrapper').append($('<div id="ding_news_lead_length" style="float:right;">'+Drupal.settings.oc_template_overwrites.oc_ding_news_lead_warning_limit+'</div>'));
+    var startval =  Drupal.settings.oc_template_overwrites.oc_ding_news_lead_warning_limit - $('#edit-field-ding-news-lead').find('textarea').val().length;
     $('#ding_news_lead_length').text(startval);
     /*
      * Register user typing and change counter
      */
     $('#edit-field-ding-news-lead').on('keyup','textarea',function(){
-        var startval = 150 - $(this).val().length;
+        var startval = Drupal.settings.oc_template_overwrites.oc_ding_news_lead_warning_limit - $(this).val().length;
         if(startval <= 0 && Warning_Shown != true)
         {
           alert(Drupal.t('OBS du får tekst ombrydning i din visning  af manchet text på forsiden! \nKontakt evt digital redaktør for mere information\nDenne Besked vises kun 1 gang pr. redigering.\n*Du kan se grænsen for ombryning i højre hjørne af manchet text boksen.*'));
