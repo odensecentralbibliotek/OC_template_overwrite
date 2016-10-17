@@ -204,7 +204,7 @@ function oc_template_overwrites_admin()
   $form['oc_ding_news_lead_warning_limit'] = array(
     '#type' => 'textfield',
     '#default_value' => variable_get('oc_ding_news_lead_warning_limit', '150'),
-    '#title' => t('Ding news leard warning limit'),
+    '#title' => t('Ding news lead warning limit'),
     '#attributes' => array(
         'placeholder' => t('text size..'),
     ),
