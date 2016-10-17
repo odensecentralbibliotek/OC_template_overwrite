@@ -8,6 +8,7 @@ jQuery(document).ready(function($) {
     /*
      * Create a counter showing how many letters the news lead has.
      */
+    debugger;
     $('#edit-field-ding-news-lead').find('.form-textarea-wrapper').append($('<div id="ding_news_lead_length" style="float:right;">'+Drupal.settings.oc_template_overwrites.oc_ding_news_lead_warning_limit+'</div>'));
     var startval =  Drupal.settings.oc_template_overwrites.oc_ding_news_lead_warning_limit - $('#edit-field-ding-news-lead').find('textarea').val().length;
     $('#ding_news_lead_length').text(startval);
