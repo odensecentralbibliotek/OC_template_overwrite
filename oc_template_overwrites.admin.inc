@@ -88,6 +88,15 @@ function oc_template_overwrites_admin()
     '#options' => array(t('Slået Fra.'),t('Slået Til.')),
   ); 
   
+  $form['oc_material_img_preview_enabled'] = array(
+    '#type' => 'radios',
+    '#title' => t('Material Preview'),
+    '#default_value' => variable_get('oc_material_img_preview_enabled', 0),
+    '#description' => t("Gør det muligt af se materiale informationer på ting refernce tabeller."),
+    '#required' => FALSE,
+    '#options' => array(t('Slået Fra.'),t('Slået Til.')),
+  ); 
+  
    $form['oc_survey_xact_enabled'] = array(
     '#type' => 'radios',
     '#title' => t('Survey xact'),
