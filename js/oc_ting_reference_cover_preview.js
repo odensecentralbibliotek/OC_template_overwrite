@@ -4,7 +4,8 @@
  * and open the template in the editor.
  */
 jQuery(document).ready(function ($) {
-    if(!Drupal.settings.oc_template_overwrites.oc_material_img_preview_enabled)
+    debugger;
+    if(Drupal.settings.oc_template_overwrites.oc_material_img_preview_enabled == 0)
     {
         return;
     }
