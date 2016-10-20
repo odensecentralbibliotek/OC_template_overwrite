@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 jQuery(document).ready(function ($) {
-    debugger;
     if(Drupal.settings.oc_template_overwrites.oc_material_img_preview_enabled == 0)
     {
         return;
@@ -49,7 +48,6 @@ jQuery(document).ready(function ($) {
     }
     function update_preview(elem)
     {
-        debugger;
         var Target = $(elem.currentTarget);
         var localId = parse_local_id(Target.val());
         /*
