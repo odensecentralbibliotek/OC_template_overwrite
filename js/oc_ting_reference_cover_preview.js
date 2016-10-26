@@ -100,6 +100,7 @@ jQuery(document).ready(function ($) {
                             $(elem).parent().find('#oc_material_preview_preloader').remove();
                             $(elem).before(img);
                         });
+                        $('body').find('#oc_material_preview_preloader').remove();
                     });
         }
     }
