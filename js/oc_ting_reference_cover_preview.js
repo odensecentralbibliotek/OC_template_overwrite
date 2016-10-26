@@ -4,32 +4,48 @@
  * and open the template in the editor.
  */
 jQuery(document).ready(function ($) {
-    if(Drupal.settings.oc_template_overwrites.oc_material_img_preview_enabled == 0)
-    {
-        return;
+    Drupal.behaviors.my_module_load_remote_content = {
+        attach: function (context, settings) {
+            debugger;
+            var test = context.first();
+            var idstr = test.attr('id');
+            if(idstr != undefined && idstr.indexOf('field-ding-news-materials-add-more-wrapper') !== -1)
+            {
+                debugger;
+                var Inputs = $('.field-name-field-ding-news-materials input[value!=""]:not(".ajax-processed")');
+                Inputs.trigger('blur');
+            }
+        }
     }
-    var ting_objects = [];
-    var keyd_inputs = {};
-    /*
-     * Bind preview creation for newly entered fields.
-     */
-    var Inputs = $('#edit-field-ding-news-materials').on('blur','input',update_preview);
-    /*
-     * Create Previews for non-empty fields
-     */
-    var Inputs = $('#edit-field-ding-news-materials input[value!=""]:not(".ajax-processed")');
+    init_cover_preview();
+    function init_cover_preview()
+    {
+        if(Drupal.settings.oc_template_overwrites.oc_material_img_preview_enabled == 0)
+        {
+            return;
+        }
+        var ting_objects = [];
+        var keyd_inputs = {};
+       /*
+        * Bind preview creation for newly entered fields.
+        */
+       var Inputs = $('.field-name-field-ding-news-materials').on('blur','input',update_preview);
+        /*
+         * Create Previews for non-empty fields
+         */
+        var Inputs = $('.field-name-field-ding-news-materials input[value!=""]:not(".ajax-processed")');
 
-    var preloader = get_preloader_elem();
-    $.each(Inputs, function (index,elem) {
-        var localId = parse_local_id(elem.value);
- 
-        ting_objects.push({local_id: localId, image_style: 'ding_medium', owner_id: '746100'});
-        keyd_inputs[localId] = elem; //so their easier to pair with their images.
-        $(elem).before(preloader);
-    });
-    
-    update_cover_previews(keyd_inputs,ting_objects);
+        var preloader = get_preloader_elem();
+        $.each(Inputs, function (index,elem) {
+            var localId = parse_local_id(elem.value);
 
+            ting_objects.push({local_id: localId, image_style: 'ding_medium', owner_id: '746100'});
+            keyd_inputs[localId] = elem; //so their easier to pair with their images.
+            $(elem).before(preloader);
+        });
+
+        update_cover_previews(keyd_inputs,ting_objects);
+    }
     function show_large_image(imageElem)
     {
         var the_dialog = $('<div id="dialog" title=""><img style="" id="oc_image_preview" src="'+$(imageElem.currentTarget).attr('src')+'" /></div>').dialog({
@@ -48,12 +64,14 @@ jQuery(document).ready(function ($) {
     }
     function update_preview(elem)
     {
+
         var Target = $(elem.currentTarget);
         var localId = parse_local_id(Target.val());
+        var img_exists = Target.parent().find(('#'+localId));
         /*
          * Exit if empty
          */
-        if(localId == "")
+        if(localId == "" || img_exists.length != 0)
         {
             return;
         }
