@@ -53,7 +53,7 @@ jQuery(document).ready(function ($) {
     function show_large_image(imageElem)
     {
         var the_dialog = $('<div id="dialog" title=""><img style="" id="oc_image_preview" src="'+$(imageElem.currentTarget).attr('src')+'" /></div>').dialog({
-            title: "OC Materiale Viewer",
+            title: Drupal.t("OC Materiale Viewer"),
             resizable: false,
             height: "auto",
             width: 400,
