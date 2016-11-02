@@ -19,7 +19,7 @@ jQuery(document).ready(function($) {
         if(startval <= 0 && Warning_Shown != true)
         {
            
-            var the_dialog = $('<div id="dialog" title="">'+Drupal.t('OBS du får tekst ombrydning i din visning  af manchet text på forsiden! \nKontakt evt digital redaktør for mere information\nDenne Besked vises kun 1 gang pr. redigering.\n*Du kan se grænsen for ombryning i højre hjørne af manchet text boksen.*')+'</div>').dialog({
+            var the_dialog = $('<div id="dialog" title="">'+Drupal.t('OBS. Du har indtastet så mange tegn, at din tekst delvist vil vises under billedet på forside visning af artiklen.<br> Denne besked vises kun 1 gang pr. redigering. Du kan se grænsen for antal tegn, så du undgår tekst ombrydning i højre hjørne af manchet tekst boksen.')+'</div>').dialog({
                 title: "Vigtig Information",
                 resizable: false,
                 height: "auto",
