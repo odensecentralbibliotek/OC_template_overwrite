@@ -19,7 +19,7 @@ jQuery(document).ready(function($) {
         if(startval <= 0 && Warning_Shown != true)
         {
            
-            var the_dialog = $('<div id="dialog" title="">'+Drupal.t('OBS. Du har indtastet så mange tegn, at din tekst delvist vil vises under billedet på forside visning af artiklen.<br> Denne besked vises kun 1 gang pr. redigering. Du kan se grænsen for antal tegn, så du undgår tekst ombrydning i højre hjørne af manchet tekst boksen.')+'</div>').dialog({
+            var the_dialog = $('<div id="dialog" title="">'+Drupal.t('OBS. Du har indtastet så mange tegn, at din tekst delvist vil vises under billedet på forside visning af artiklen.<br><br> Denne besked vises kun 1 gang pr. redigering. Du kan se grænsen for antal tegn, så du undgår tekst ombrydning i højre hjørne af manchet tekst boksen.')+'</div>').dialog({
                 title: "Vigtig Information",
                 resizable: false,
                 height: "auto",
