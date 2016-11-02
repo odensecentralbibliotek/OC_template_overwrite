@@ -6,13 +6,19 @@
 jQuery(document).ready(function ($) {
     Drupal.behaviors.my_module_load_remote_content = {
         attach: function (context, settings) {
-            var test = context.first();
-            var idstr = test.attr('id');
-            if(idstr != undefined && idstr.indexOf('field-ding-news-materials-add-more-wrapper') !== -1)
-            {
-                var Inputs = $('.field-name-field-ding-news-materials input[value!=""]:not(".ajax-processed")');
-                Inputs.trigger('blur');
+            try {
+                var test = context.first();
+                var idstr = test.attr('id');
+                if(idstr != undefined && idstr.indexOf('field-ding-news-materials-add-more-wrapper') !== -1)
+                {
+                    var Inputs = $('.field-name-field-ding-news-materials input[value!=""]:not(".ajax-processed")');
+                    Inputs.trigger('blur');
+                }
+            } catch (e) {
+                
             }
+
+            
         }
     }
     init_cover_preview();
