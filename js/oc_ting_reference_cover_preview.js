@@ -71,6 +71,10 @@ jQuery(document).ready(function ($) {
 
         var Target = $(elem.currentTarget);
         var localId = parse_local_id(Target.val());
+        if(localId == "")
+        {
+            return;
+        }
         var img_exists = Target.parent().find(('#'+localId));
         /*
          * Exit if empty
