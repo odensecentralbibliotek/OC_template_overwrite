@@ -4,8 +4,9 @@
  * and open the template in the editor.
  */
 jQuery(document).ready(function ($) {
-    Drupal.behaviors.my_module_load_remote_content = {
+    Drupal.behaviors.oc_ting_reference_cover_preview = {
         attach: function (context, settings) {
+            debugger;
             try {
                 var test = context.first();
                 var idstr = test.attr('id');
