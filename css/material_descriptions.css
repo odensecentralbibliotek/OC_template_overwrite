@@ -33,3 +33,6 @@ and open the template in the editor.
 {
     width: 80%;
 }
+#field-ding-news-materials-values tbody tr, #field-ding-news-material-descrip-values tbody tr {
+    height: 45px !important;
+}
