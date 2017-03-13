@@ -279,44 +279,19 @@ function oc_template_overwrites_bpi_custom_delete(&$form, &$form_state)
 {
     $form_state['values']['field_bpi_workflow']['und']['0']['workflow']['workflow_sid'] = variable_get('oc_bpi_delete_state_sid',14);
 }
-/**
- * Implements hook_entity_update().
- *
+/*
+ * Help dennish to eu stats.
  */
-function oc_template_overwrites_entity_update($entity, $entity_type) {
-  /*if ($entity->type == 'ding_news') { //this is the entity like a node that has the workflow field
-//@todo: check for more checks if hook update is called during other entity update operations.
-    foreach ($entity->workflow_transitions as $key => $value) {
-      $field_name = $key;
-      $workflow = $value;
-      break; // There should only be one workflow at this point
+function oc_template_overwrites_pathauto_alias_alter(&$alias, $context)
+{
+    /*
+     * Alter the path to be better eu minded.
+     */
+    $test = $context['data']['node'];
+    if($context['data']['node']->field_ding_news_category['und'][0]['tid'] == 140)
+    {
+        $alias = "nyheder/eu/" . $context['data']['node']->title;
     }
-
-    //Example states. This can be fetched from else where.
-    //$creation = 1 // not used
-    $preview = 2;
-    $approved = 3;
-    $expired = 4;
-
-    //For clarity that the state change that triggers hook_entity_update is going to be the current sid after state change
-    $this_sid = $workflow->new_sid;
-
-    $timestamp = time();
-
-    // Check if the entity has been put into approved state manually
-    if ($this_sid == $approved) {
-
-      //Entity will expire after 30 days
-      $scheduled = strtotime('+30 day', $timestamp);
-      $comment = '';
-
-      $uid = 1; //Or use global $user, $user->uid
-
-      $scheduled_transition = new WorkflowScheduledTransition();
-      $scheduled_transition->setValues($entity_type, $entity, $field_name, $this_sid, $expired, $uid, $scheduled, $comment);
-      $scheduled_transition->save();
-    }
-  }*/
 }
 /*
  * Make sure the material description lists does not grow unintended beyond
