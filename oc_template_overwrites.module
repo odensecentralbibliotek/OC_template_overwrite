@@ -287,10 +287,18 @@ function oc_template_overwrites_pathauto_alias_alter(&$alias, $context)
     /*
      * Alter the path to be better eu minded.
      */
-    $test = $context['data']['node'];
-    if($context['data']['node']->field_ding_news_category['und'][0]['tid'] == 140)
+    if($context['data']['node']->type == "ding_news")
     {
-        $alias = "nyheder/eu/" . $context['data']['node']->title;
+        if($context['data']['node']->field_ding_news_category['und'][0]['tid'] == 140)
+        {
+            $secured_string = explode('/',$alias);
+            $alias = $secured_string[0] . "/eu/" . $secured_string[1];
+        }
+        /*elseif(strpos($alias, '/eu/') !== false)
+        {
+            $secured_string = explode('/',$alias);
+            $alias = $secured_string[0] . "/" . $secured_string[1];
+        }*/
     }
 }
 /*
