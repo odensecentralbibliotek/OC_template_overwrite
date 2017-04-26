@@ -366,6 +366,41 @@ function oc_template_overwrites_validate_user_phone($form, &$form_state)
         form_set_error_multiple('profile_provider_alma][field_alma_mobile_phone', $errors);
     }
 }
+  function oc_template_overwrites_cron() {
+  /*
+  * Only if node enabled.
+  */
+  if(variable_get('oc_unpublish_enabled',0)) {
+  
+  $date = date_create();
+	$date->modify('-'.variable_get('oc_unpublish_days', 0).' days');
+	$new_date = date_timestamp_get($date);
+ 
+	// Find events that are published and are older than a day old
+	$query = new EntityFieldQuery();
+    $query->entityCondition('entity_type', 'node')
+      ->entityCondition('bundle', 'ding_news')
+      ->propertyCondition('status',1)
+      ->propertyCondition('created', $new_date, '<')
+      ->addMetaData('account', user_load(1));
+ 
+    $result = $query->execute();
+
+        if ($result) {
+	    $nids = array_keys($result['node']);
+	   //dpm($nids);
+	    foreach ($nids as $nid) {
+		    // Delete the nodes first before creating the redirect.
+			//node_delete($nid);
+ 
+			// If you do not want to delete the node, you can unpublish first, then run a query to delete
+			$node_to_unp = node_load($nid);
+			$node_to_unp->status = 0;
+			node_save($node_to_unp);
+      }
+     } 
+    }
+  }
 /*
  * Helper to set multiple errors for 1 field.
  * http://drupal.stackexchange.com/questions/8327/how-to-set-multiple-error-messages-with-form-set-error
