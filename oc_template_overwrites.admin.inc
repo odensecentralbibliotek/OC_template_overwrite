@@ -219,5 +219,23 @@ function oc_template_overwrites_admin()
     ),
     '#description' => t(''),
     );
+    $form['oc_unpublish_enabled'] = array(
+    '#type' => 'radios',
+    '#title' => t('Slå afpublicering af nyheder til og fra.'),
+    '#default_value' => variable_get('oc_unpublish_enabled', 0),
+    '#description' => t("Slå afpublicering af nyheder til og fra."),
+    '#required' => FALSE,
+    '#options' => array(t('Slået Fra.'), t('Slået Til.')),
+  );
+  if (variable_get('oc_unpublish_enabled', 0) == 1) {
+    $form['oc_unpublish_days'] = array(
+      '#type' => 'textfield',
+      '#default_value' => variable_get('oc_unpublish_days', ''),
+      '#title' => t('Antal dage tilbage:'),
+      '#attributes' => array(
+        'placeholder' => t('Antal dage.'),
+      ),
+    );
+  }
   return system_settings_form($form);
 }
