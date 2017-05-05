@@ -339,16 +339,16 @@ function oc_template_validate_material_description_list($form, &$form_state)
 function oc_template_overwrites_validate_user_phone($form, &$form_state)
 {
     $errors = array();
-    $phone_number = $form_state['values']['profile_provider_alma']['field_fbs_mobile_phone']['und']['0']['value'];
+    $phone_number = $form_state['values']['profile_provider_fbs']['field_fbs_phone']['und']['0']['value'];
     /*
      * Allow phone number field to be empty in case
      * patrons dont want to attach phone number.
      */	
-    if($phone_number == "" && $form['fbs_user_sms']['#value'] == 0)
+    if($phone_number == "" && $form_state['values']['profile_provider_fbs']['field_fbs_phone_notification'][0]['und']['value'] == 0)
     {
         return;
     }
-    if($phone_number == "" && $form['fbs_user_sms']['#value'] == 1)
+    if($phone_number == "" && $form_state['values']['profile_provider_fbs']['field_fbs_phone_notification'][0]['und']['value'] == 1)
     {
         form_set_error('profile_provider_fbs][field_fbs_mobile_phone',t('Cant use sms service without a phone number.'));
         return;
