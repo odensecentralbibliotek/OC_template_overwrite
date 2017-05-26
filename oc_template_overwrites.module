@@ -160,6 +160,8 @@ function oc_template_overwrites_form_alter(&$form, &$form_state, $form_id) {
   if ($form_id == 'user_profile_form') {
     //dpm($form['#validate']);
     $form['#validate'][] = 'oc_template_overwrites_validate_user_phone';
+    $form['#validate'][] = 'oc_template_overwrites_validate_sync_user_email';
+    $form['profile_provider_fbs']['field_fbs_mail']['#attributes']['class'][] = 'js-hide';
     /*
     * Add JS
     */
@@ -265,6 +267,7 @@ function oc_template_overwrites_form_alter(&$form, &$form_state, $form_id) {
           }
         }
   }
+
 }
 function oc_template_overwrites_bpi_custom_lokal_content(&$form, &$form_state)
 {
@@ -366,10 +369,31 @@ function oc_template_overwrites_validate_user_phone($form, &$form_state)
         form_set_error_multiple('profile_provider_fbs][field_fbs_mobile_phone', $errors);
     }
 }
+function oc_template_overwrites_validate_sync_user_email($form, &$form_state)
+{
+    $email =  $form_state['values']['mail'];
+    $form_state['values']['profile_provider_fbs']['field_fbs_mail']['und']['0']['value'] = $email;
+}
 /*
  * Helper to set multiple errors for 1 field.
  * http://drupal.stackexchange.com/questions/8327/how-to-set-multiple-error-messages-with-form-set-error
  */
 function form_set_error_multiple($name = NULL, $messages = '', $limit_validation_errors = NULL) {
   return form_set_error($name, implode('<br/>', $messages));
+}
+function oc_template_overwrites_oc_departments()
+{
+    $data = array();
+    $text = variable_get('fbs_search_departments', '');
+    
+    $tmp = explode(PHP_EOL,$text);
+    foreach($tmp as $branch)
+    {
+        $b = explode('|',$branch);
+        if(!empty($b[0]) && !empty($b[1]))
+        {
+            $data[$b[1]] = $b[0];
+        }
+    }
+    return $data;
 }
