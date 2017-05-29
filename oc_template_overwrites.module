@@ -392,7 +392,7 @@ function oc_template_overwrites_oc_departments()
         $b = explode('|',$branch);
         if(!empty($b[0]) && !empty($b[1]))
         {
-            $data[$b[1]] = $b[0];
+            $data[str_replace(array("\n", "\r"), '',$b[1])] = str_replace(array("\n", "\r"), '',($b[0]));
         }
     }
     return $data;
