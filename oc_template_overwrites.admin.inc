@@ -219,5 +219,13 @@ function oc_template_overwrites_admin()
     ),
     '#description' => t(''),
     );
+   $form['oc_fbs_enabled'] = array(
+    '#type' => 'radios',
+    '#title' => t('Slå afpublicering af loginboks til og fra.'),
+    '#default_value' => variable_get('oc_fbs_enabled', 0),
+    '#description' => t("Slå fbs på loginboks til og fra."),
+    '#required' => FALSE,
+    '#options' => array(t('Slået Fra.'), t('Slået Til.')),
+  );
   return system_settings_form($form);
 }
