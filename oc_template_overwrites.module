@@ -169,6 +169,54 @@ function oc_template_overwrites_form_alter(&$form, &$form_state, $form_id) {
      drupal_get_path('module', 'oc_template_overwrites') . '/js/user_profile_attached.js',
      );
   }
+  elseif($form_id == 'ding_page_node_form')
+  {
+      /*
+       * Add submit handler to ensure if material description fields exists
+       * it does now grow automaticly without connected materials.
+       */
+      $form['#submit'][] = 'oc_template_validate_material_description_list';
+       /*
+       * Ding news lead length warning
+       */
+      drupal_add_js(drupal_get_path('module', 'oc_template_overwrites') ."/js/oc_ting_reference_cover_preview_page.js");
+      
+      drupal_add_js(array('oc_template_overwrites' => array('oc_ding_news_lead_warning_limit' => variable_get('oc_ding_news_lead_warning_limit', 150) , 'oc_material_img_preview_enabled' => variable_get('oc_material_img_preview_enabled',0))), 'setting');
+      /*
+       * Add submit handler to ensure if material description fields exists
+       * it does now grow automaticly without connected materials.
+       */
+      $form['#submit'][] = 'oc_template_validate_material_description_list';
+        if(variable_get('oc_material_descriptions_enabled',0) && isset($form['field_ding_page_material_descrip']['und']))
+        {
+                $form['#attached']['css'] = array(
+                  drupal_get_path('module', 'oc_template_overwrites') . '/css/material_descriptions.css',
+                );
+
+                $form['#attached']['js'] = array(
+                  drupal_get_path('module', 'oc_template_overwrites') . '/js/material_descriptions_page.js',
+                );
+                foreach($form['field_ding_page_material_descrip']['und'] as $index => $elem)
+                {
+                    if(is_array($elem) && isset($elem['#field_name']) && 
+                            $elem['#field_name'] == 'field_ding_page_material_descrip' 
+                            && isset($elem['value']) && is_array($elem['value']))
+                    {
+                        if($form['field_ding_page_material_descrip']['und'][$index]['value']['#default_value'] == ".")
+                        {
+                            $form['field_ding_page_material_descrip']['und'][$index]['value']['#default_value'] = '';
+                        }
+                    }
+                }
+          }
+      else
+      {
+          //Hide the descriptions
+           $form['#attached']['css'] = array(
+              drupal_get_path('module', 'oc_template_overwrites') . '/css/material_descriptions_disabled.css',
+            );
+      }
+  }
   elseif($form_id == 'ding_news_node_form')
   {
       /*
@@ -331,6 +379,28 @@ function oc_template_validate_material_description_list($form, &$form_state)
                  * dont set a . to make it save proper. invalidating the list.
                  */
                  $form_state['values']['field_ding_news_material_descrip']['und'][$i]['value'] = ".";
+            }
+        }
+    }
+    if(isset($form_state['values']['field_ding_page_material_descrip']))
+    {
+        $Material_descrip_count = sizeof($form_state['values']['field_ding_page_material_descrip']['und'])-1;
+        $Material_count = sizeof($form_state['values']['field_ding_page_materials']['und'])-1;
+        for($i = 0; $i < $Material_descrip_count;$i++)
+        {
+            if(!isset($form_state['values']['field_ding_page_materials']['und'][$i]) || 
+                    $form_state['values']['field_ding_page_materials']['und'][$i]['identifier'] == "")
+            {
+                $form_state['values']['field_ding_page_material_descrip']['und'][$i]['value'] = "";
+            }
+            elseif(isset($form_state['values']['field_ding_page_materials']['und'][$i]) &&
+                   $form_state['values']['field_ding_page_material_descrip']['und'][$i]['value'] == "" )
+            {
+                /*
+                 * Save the user incase they delete all text from input , and
+                 * dont set a . to make it save proper. invalidating the list.
+                 */
+                 $form_state['values']['field_ding_page_material_descrip']['und'][$i]['value'] = ".";
             }
         }
     }

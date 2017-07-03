@@ -36,3 +36,35 @@ and open the template in the editor.
 #field-ding-news-materials-values tbody tr, #field-ding-news-material-descrip-values tbody tr {
     height: 45px !important;
 }
+/*
+* for page views.
+*/
+#field-ding-page-materials-values
+{
+    width: 100%;
+}
+#edit-field-ding-page-materials
+{
+    width: 38%;
+    float:left;
+}
+
+#field-ding-page-material-descrip-values
+{
+    float:left;
+
+    margin-left: 15px;
+}
+#edit-field-ding-page-material-descrip
+{
+    float:left;
+    width:60%;
+    margin-left: 15px;
+}
+#field-ding-page-material-descrip-values input
+{
+    width: 80%;
+}
+#field-ding-page-materials-values tbody tr, #field-ding-page-material-descrip-values tbody tr {
+    height: 45px !important;
+}
