@@ -162,7 +162,8 @@ function oc_template_overwrites_form_alter(&$form, &$form_state, $form_id) {
     $form['#validate'][] = 'oc_template_overwrites_validate_user_phone';
     $form['#validate'][] = 'oc_template_overwrites_validate_sync_user_email';
     //$form['profile_provider_fbs']['field_fbs_mail']['#attributes']['class'][] = 'js-hide';
-    $form['account']['#attributes']['class'][] = 'js-hide';
+    $form['account']['mail']['#attributes']['class'][] = 'js-hide';
+    $form['account']['mail']['#title_display']='invisible';
     /*
     * Add JS
     */
