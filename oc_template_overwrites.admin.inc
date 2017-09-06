@@ -227,5 +227,13 @@ function oc_template_overwrites_admin()
     '#required' => FALSE,
     '#options' => array(t('Slået Fra.'), t('Slået Til.')),
   );
+   $form['oc_forced_interest_periode'] = array(
+    '#type' => 'radios',
+    '#title' => t('Tvinger brugere til at vælge interesse periode ved alle reservationer'),
+    '#default_value' => variable_get('oc_forced_interest_periode', 0),
+    '#description' => t("Tvinger brugere til at vælge interesse periode hved reservation."),
+    '#required' => FALSE,
+    '#options' => array(t('Slået Fra.'), t('Slået Til.')),
+  );
   return system_settings_form($form);
 }
