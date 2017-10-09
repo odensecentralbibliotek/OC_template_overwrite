@@ -235,5 +235,15 @@ function oc_template_overwrites_admin()
     '#required' => FALSE,
     '#options' => array(t('Slået Fra.'), t('Slået Til.')),
   );
+    $form['lost_password_button'] = array(
+    '#type' => 'radios',
+    '#title' => t('Tillader brugere at gendanne kodeord via email.'),
+    '#default_value' => variable_get('lost_password_button', 0),
+    '#description' => t("Tillader brugere at gendanne kodeord via email."),
+    '#required' => FALSE,
+    '#options' => array(t('Slået Fra.'), t('Slået Til.')),
+  );
+   
+   
   return system_settings_form($form);
 }
