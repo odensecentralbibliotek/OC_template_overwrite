@@ -91,9 +91,14 @@
                             // Define the toolbar groups as it is a more accessible solution.
                             toolbarGroups: [
                                 {"name": "links", "groups": ["links"]},
+                                {"name": 'basicstyles', "groups": ["basicstyles"]}
+                            ],
+                            toolbar:[
+                                { name: 'basicstyles', groups: [ 'basicstyles'], items: [ 'Bold'] },
+                                { name: 'links', items: [ 'Link', 'Unlink', 'Anchor' ] }
                             ],
                             // Remove the redundant buttons from toolbar groups defined above.
-                            removeButtons: 'Underline,Strike,Subscript,Superscript,Anchor,Styles,Specialchar,paragraph,basicstyles,document,insert,styles,about',
+                            removeButtons: 'Underline,Strike,Subscript,Superscript,Anchor,Styles,Specialchar,paragraph,document,insert,styles,about',
                         });
                     },
                 });
