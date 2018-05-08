@@ -8,7 +8,7 @@
 
     Drupal.behaviors.ansat_table = {
         attach: function (context, settings) {
-          $( ".views-field.views-field-field-bibliotek:contains('Borgerservice')" ).parent().remove();
+          $( "table").remove( ".views-field.views-field-field-bibliotek:contains('Borgerservice')" );
         }
     };
 
