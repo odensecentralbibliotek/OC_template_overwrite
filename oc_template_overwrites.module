@@ -177,7 +177,17 @@ function oc_template_overwrites_form_alter(&$form, &$form_state, $form_id) {
       * Rearrange fields so they reflect the use cases better
       */
      
-     
+   
+  }
+  elseif($form_id == 'ding_event_node_form')
+  {
+      foreach($form['field_ding_event_library']['und']['#options'] as $key=>$value) {
+          $val = substr($value, 0, 6);
+          if($val == 'Little' || $value == 'Borgernes Hus Pop-Up'){
+              unset($form['field_ding_event_library']['und']['#options'][$key]);
+          }
+      }
+
   }
   elseif($form_id == 'ding_page_node_form')
   {
