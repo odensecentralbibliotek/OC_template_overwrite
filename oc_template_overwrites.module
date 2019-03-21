@@ -90,6 +90,7 @@ function oc_template_overwrites_preprocess_html(&$page)
     $config = array(
             'nysfyn_link' => variable_get('nysfyn_home_page', ''),
             'is_active' => variable_get('nysfyn_badge_enabled', 0),
+            'ding_opening_hours_expand_setting' => variable_get('ding_opening_hours_expand_setting', 'dont_expand'),
             'google_translate_enabled' => variable_get('google_translate_enabled', 0),
             'google_translate_languages' => variable_get('google_translate_languages', 'da,de,en,es,nl,no')
            );

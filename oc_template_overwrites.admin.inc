@@ -10,8 +10,18 @@ function oc_template_overwrites_admin()
   $form = array(
     '#tree' => TRUE,
   );
-  
-  $form['description_meta'] = array(
+
+    $form['ding_opening_hours_expand_setting'] = array(
+      '#type' => 'select',
+      '#title' => t('Expand settings'),
+      '#default_value' => variable_get('ding_opening_hours_expand_setting', 'dont_expand'),
+      '#options' => array(
+        'dont_expand' => t('Dont expand'),
+        'expand_on_first' => t('Expand on first library'),
+        'expand_all' => t('Expand all libraries'),
+      ),
+    );
+    $form['description_meta'] = array(
       '#type' => 'textfield',
       '#default_value' => variable_get('description_meta', ''),
       '#title' => t('Angiv meta beskrivelse.'),
