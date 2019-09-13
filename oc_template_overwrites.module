@@ -486,3 +486,14 @@ function oc_template_overwrites_oc_departments()
     }
     return $data;
 }
+function oc_template_overwrites_views_post_execute(&$view) {
+  if ($view->name == 'netmedier') {
+    foreach ($view->result as $result) {
+      // Replace all empty fields with the dash '-' character.
+      if(!empty($result->field_field_se_online)) {
+        $result->field_field_se_online[0]['rendered']['#element']['url'] = urldecode($result->field_field_se_online[0]['raw']['url']);
+        $result->field_field_se_online[0]['rendered']['#element']['display_url'] = urldecode($result->field_field_se_online[0]['raw']['url']);
+      }
+    }
+  }
+}
