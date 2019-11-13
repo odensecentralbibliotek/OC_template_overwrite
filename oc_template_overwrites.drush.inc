@@ -3,10 +3,28 @@ function oc_template_overwrites_drush_command() {
   $items['oc-template-overwrites-add-image-alts-field'] = array(
     'description' => 'Install ADHL ting object field.',
   );
-
+  $items['oc-template-overwrites-fix-deleted-status'] = array(
+    'description' => '',
+  );
   return $items;
 }
 
+function drush_oc_template_overwrites_fix_deleted_status() {
+  $nodes = node_load_multiple(array(), array('isDeleted' => 1));
+  foreach($nodes as $node)
+  {
+    $node->status = 0;
+    node_save($node);
+  }
+  $files = file_load_multiple(array(), array('isDeleted' => 1));
+
+  if (count($files) > 0) {
+    foreach ($files as $file) {
+      $file->status = 0;
+      file_save($file);
+    }
+  }
+}
 function drush_oc_template_overwrites_add_image_alts_field() {
 
     drush_log(dt('Adding alt descriptions for missing images..'), 'ok');
