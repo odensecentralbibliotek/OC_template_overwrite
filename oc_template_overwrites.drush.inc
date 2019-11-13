@@ -22,8 +22,10 @@ function drush_oc_template_overwrites_fix_deleted_status() {
 
   if (count($files) > 0) {
     foreach ($files as $file) {
-      $file->status = 0;
-      file_save($file);
+      db_update('file_managed')
+                ->fields(array('status' => 0))
+                ->condition('fid', $file->fid)
+                ->execute();
     }
   }
 }
