@@ -13,8 +13,10 @@ function drush_oc_template_overwrites_fix_deleted_status() {
   $nodes = node_load_multiple(array(), array('isDeleted' => 1));
   foreach($nodes as $node)
   {
-    $node->status = 0;
-    node_save($node);
+    db_update('node_revision')
+                ->fields(array('status' => 0))
+                ->condition('nid', $node->nid)
+                ->execute();
   }
   $files = file_load_multiple(array(), array('isDeleted' => 1));
 
