@@ -499,12 +499,12 @@ function oc_template_overwrites_views_post_execute(&$view) {
 }
 function fynboots_url_outbound_alter(&$path, &$options, $original_path) {
   global $user;
-  if (preg_match('/^user\/(\d+)\/(.*)$/', $path, $matches)) {
+  if (preg_match('/^user\/(\d+)\/?(.*)$/', $path, $matches)) {
     // To allow site administrators to edit other user they have to be filter
     // out of this alter. When accessing another drupal user account.
-    if ($user->uid == $matches[1] && !(in_array("administrator", $user->roles) || in_array("local administrator", $user->roles))) {
+    if ($user->uid == $matches[1]) {
       // This was not the above case, so we change the path to use "me".
-      $path = 'user/me/' . $matches[2];
+      $path = !empty($matches[2]) ? 'user/me/' . $matches[2] : 'user/me';
     }
   }
 
