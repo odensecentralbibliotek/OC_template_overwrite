@@ -503,6 +503,10 @@ function fynboots_url_outbound_alter(&$path, &$options, $original_path) {
     // of me then assume that the user intend to access their own profile and
     // redirect to /user/me. drupal_goto() will alter the outbound url before the
     // redirect.
+    if(strpos($_SERVER['SCRIPT_URL'],'admin/') !== false)
+    {
+     return;
+    }
     $tmp = $_SERVER['SCRIPT_URL'];
     $return = preg_match('/^\/user\/(\d+)\/?(.*)$/', $tmp , $matches);
     if ($return) {
@@ -534,7 +538,10 @@ function fynboots_url_outbound_alter(&$path, &$options, $original_path) {
 }
 function oc_template_overwrites_url_inbound_alter(&$path, $original_path, $path_language) {
 //  exit(1);
-$test = 0;
+if(strpos($_SERVER['SCRIPT_URL'],'admin/') !== false)
+{
+ return;
+}
 if (preg_match('/^user\/me\/{0,1}(.*)$/', $path, $matches)) {
   global $user;
   $uid = user_is_logged_in() ? $user->uid : 0;
