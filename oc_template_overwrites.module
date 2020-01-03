@@ -503,20 +503,21 @@ function fynboots_url_outbound_alter(&$path, &$options, $original_path) {
     // of me then assume that the user intend to access their own profile and
     // redirect to /user/me. drupal_goto() will alter the outbound url before the
     // redirect.
-    if(strpos($_SERVER['SCRIPT_URL'],'admin/') !== false)
+    $script_url = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] ;
+    if(strpos($script_url,'admin/') !== false)
     {
      return;
     }
-    $tmp = $_SERVER['SCRIPT_URL'];
+    $tmp = $script_url;
     $return = preg_match('/^\/user\/(\d+)\/?(.*)$/', $tmp , $matches);
     if ($return) {
       if(isset($matches[2]))
       {
-        $_SERVER['SCRIPT_URL'] = "user/me" . $matches[2];
+        $script_url = "user/me" . $matches[2];
         drupal_goto("user/me/". $matches[2]);
       }
       else{
-        $_SERVER['SCRIPT_URL'] = "user/me";
+        $script_url = "user/me";
         drupal_goto("user/me");
       }
         
@@ -537,8 +538,9 @@ function fynboots_url_outbound_alter(&$path, &$options, $original_path) {
   }
 }
 function oc_template_overwrites_url_inbound_alter(&$path, $original_path, $path_language) {
+$script_url = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] ;
 //  exit(1);
-if(strpos($_SERVER['SCRIPT_URL'],'admin/') !== false)
+if(strpos($script_url,'admin/') !== false)
 {
  return;
 }
