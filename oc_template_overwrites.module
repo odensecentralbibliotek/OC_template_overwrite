@@ -1,20 +1,26 @@
 <?php
-function oc_template_overwrites_views_pre_build(&$view) {
+function oc_template_overwrites_views_pre_build(&$view)
+{
   if ($view->name === 'ding_news' && $view->current_display === 'panel_pane_1') {
-      module_load_include('php', 'mobile_detect', 'mobile_detect');
-      $detect = new Mobile_Detect();
-      $results = null;
-      if ($detect->isMobile()) {
-          // Page is zero indexed: first page is NULL or 0.
-          $view->init_pager();
-          $view->set_items_per_page(2);
-          $view->display_handler->get_plugin('pager')->get_items_per_page();
-      } else {
-          // Page is zero indexed: first page is NULL or 0.
-          $view->init_pager();
-          $view->set_items_per_page(6);
-          $view->display_handler->get_plugin('pager')->get_items_per_page();
-      }
+    module_load_include('php', 'mobile_detect', 'mobile_detect');
+    $detect = new Mobile_Detect();
+    $results = null;
+    if ($detect->isTablet()) {
+      // Page is zero indexed: first page is NULL or 0.
+      $view->init_pager();
+      $view->set_items_per_page(6);
+      $view->display_handler->get_plugin('pager')->get_items_per_page();
+    } elseif ($detect->isMobile()) {
+      // Page is zero indexed: first page is NULL or 0.
+      $view->init_pager();
+      $view->set_items_per_page(2);
+      $view->display_handler->get_plugin('pager')->get_items_per_page();
+    } else {
+      // Page is zero indexed: first page is NULL or 0.
+      $view->init_pager();
+      $view->set_items_per_page(6);
+      $view->display_handler->get_plugin('pager')->get_items_per_page();
+    }
   }
 }
 
