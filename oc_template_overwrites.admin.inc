@@ -253,7 +253,16 @@ function oc_template_overwrites_admin()
     '#required' => FALSE,
     '#options' => array(t('Slået Fra.'), t('Slået Til.')),
   );
-   
+  $form['oc_emergency_login_message'] = array(
+    '#type' => 'text_format',
+    '#default_value' => variable_get('oc_emergency_login_message', ''),
+    '#title' => t('Survey link'),
+    '#attributes' => array(
+        'placeholder' => t('Survey id..'),
+    ),
+    '#description' => t('survey xact'),
+    '#format' => filter_default_format(),
+);
    
   return system_settings_form($form);
 }
