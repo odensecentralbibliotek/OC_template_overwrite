@@ -256,11 +256,11 @@ function oc_template_overwrites_admin()
   $form['oc_emergency_login_message'] = array(
     '#type' => 'text_format',
     '#default_value' => variable_get('oc_emergency_login_message', ''),
-    '#title' => t('Survey link'),
+    '#title' => t('Login nødbesked'),
     '#attributes' => array(
-        'placeholder' => t('Survey id..'),
+        'placeholder' => t('nødbesked'),
     ),
-    '#description' => t('survey xact'),
+    '#description' => t('Besked som bliver vist på login boks når der et globalt problem.'),
     '#format' => filter_default_format(),
 );
    
