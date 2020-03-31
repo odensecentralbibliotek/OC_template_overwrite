@@ -253,15 +253,20 @@ function oc_template_overwrites_admin()
     '#required' => FALSE,
     '#options' => array(t('Slået Fra.'), t('Slået Til.')),
   );
+  $defaults = array(
+    'value' => '',
+    'format' => filter_default_format(),
+  );
+  $data = variable_get('oc_emergency_login_message', $defaults);
   $form['oc_emergency_login_message'] = array(
     '#type' => 'text_format',
-    '#default_value' => variable_get('oc_emergency_login_message', ''),
+    '#default_value' => $data['value'],
     '#title' => t('Login nødbesked'),
     '#attributes' => array(
         'placeholder' => t('nødbesked'),
     ),
     '#description' => t('Besked som bliver vist på login boks når der et globalt problem.'),
-    '#format' => filter_default_format(),
+    '#format' => $data['format'],
 );
    
   return system_settings_form($form);
