@@ -274,5 +274,11 @@ function emergencymessage_form_admin($form)
     '#description' => t('Besked som bliver vist på login boks når der et globalt problem.'),
     '#format' => $data['format'],
 );
-  return system_settings_form($form);
+$return = system_settings_form($form);
+$return['#submit'][] = "emergencymessage_clear_cache";
+  return $return;
+}
+function emergencymessage_clear_cache()
+{
+  cache_clear_all('*', "cache_page", TRUE);
 }
