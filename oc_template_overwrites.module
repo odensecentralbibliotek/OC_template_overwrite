@@ -65,13 +65,22 @@ function  oc_template_overwrites_menu() {
   $items = array();
   $items['admin/settings/oc_template_overwrites'] = array(
     'title' => 'OC Overwrites',
-    'description' => 'Configuration af oc digitalpost modul',
+    'description' => '',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('oc_template_overwrites_admin'),
     'access arguments' => array('administer oc_template_overwrites'),
     'file' => 'oc_template_overwrites.admin.inc'
    );
-  
+
+   $items['admin/content/emergencymessage'] = array(
+    'title' => 'Indstill nødbesked',
+    'description' => '',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('emergencymessage_form_admin'),
+    'access arguments' => array('administer nodes'),
+    'file' => 'oc_template_overwrites.admin.inc',
+    'weight' => 999,
+   );
   return $items;
 }
 /*

@@ -253,6 +253,12 @@ function oc_template_overwrites_admin()
     '#required' => FALSE,
     '#options' => array(t('Slået Fra.'), t('Slået Til.')),
   );
+  
+   
+  
+}
+function emergencymessage_form_admin($form)
+{
   $defaults = array(
     'value' => '',
     'format' => filter_default_format(),
@@ -268,6 +274,5 @@ function oc_template_overwrites_admin()
     '#description' => t('Besked som bliver vist på login boks når der et globalt problem.'),
     '#format' => $data['format'],
 );
-   
   return system_settings_form($form);
 }
