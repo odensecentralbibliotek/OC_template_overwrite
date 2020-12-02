@@ -7,34 +7,12 @@
  * markup necessary to render the opening hours interface.
  */
 ?>
- <script>
-jQuery(function($) {
-    jQuery( "#datepicker" ).datepicker({maxDate: "+10Y" });
-    jQuery('#CalenderSelecter').click(function(){
-        $('#datepicker').show().focus().hide(); //hack to make datepicker input field hidden and still working.
-        jQuery("#datepicker").datepicker( "show" );
-    });
-    jQuery("#datepicker").on('change',function(e){
-        var date = new Date($('#datepicker').val());
-        Drupal.OpeningHours.adminApp.navigate('date/' + date.getISODate(), true);
-    });
-});
-</script>
-<p style="float:right"><button id="CalenderSelecter">Vælg Dato</button> <input style="display:none;"  type="text" id="datepicker"></p>
-
- <div id="opening-hours-admin">
+<div id="opening-hours-admin">
   <p class="placeholder"><?php print t('Loading administration interface…'); ?></p>
 </div>
 
 <script type="text/template" id="oho-admin-main-template">
-  
-  <ul style="float:left;margin:0px !important;" class="navigation clear-block">
-    <li><a class="prev-week" href="#prev" title="<?php print t('Previous week'); ?>">‹</a>
-    <li><a class="current-week" href="#current"><?php print t('Current week'); ?></a>
-    <li><a class="next-week" href="#next" title="<?php print t('Next week'); ?>">›</a>
-  </ul>
-
-  <div style="" class="dateheader">
+  <div class="dateheader">
     <h2><?php echo t('Week !week, !year', array(
       '!week' => '<%- weekNumber %>',
       '!year' => '<%- year %>',
@@ -46,6 +24,13 @@ jQuery(function($) {
       <% } %>
     </h3>
   </div>
+
+  <ul class="navigation clear-block">
+    <li><a class="prev-week" href="#prev" title="<?php print t('Previous week'); ?>">‹</a>
+    <li><a class="current-week" href="#current"><?php print t('Current week'); ?></a>
+    <li><a class="next-week" href="#next" title="<?php print t('Next week'); ?>">›</a>
+  </ul>
+
   <table class="days">
     <thead>
       <tr>
@@ -59,7 +44,8 @@ jQuery(function($) {
 <script type="text/template" id="oho-instance-display-template">
   <span class="start_time"><%= start_time %></span> –
   <span class="end_time"><%= end_time %></span>
-  <p class="notice"><%= notice %></p>
+  <p class="category"><%- category %></p>
+  <p class="notice"><%- notice %></p>
 </script>
 
 <script type="text/template" id="oho-instance-edit-template">
@@ -82,10 +68,25 @@ jQuery(function($) {
       <input type="text" class="text end repeat-end-date" name="oho-repeat-end-date" id="oho-repeat-end-date" size="9" title="<?php print t('End date'); ?>" value="<%= repeat_end_date %>" />
     </fieldset>
 
+
     <fieldset class="details">
+      <% if (Drupal.settings.OpeningHours.categories) { %>
+        <label>
+          <?php echo t('Category'); ?>
+          <select class="oho-category category-tid" name="oho-category">
+            <option value=""><?php echo t('- None -'); ?></option>
+          <% _.each(Drupal.settings.OpeningHours.categories, function (name, tid) { %>
+            <option <% if (category_tid == tid) { %>selected="selected" <% } %>value="<%= tid %>">
+              <%= name %>
+            </option>
+          <% }); %>
+          </select>
+        </label>
+      <% } %>
+
       <label for="oho-notice"><?php print t('Notice'); ?></label>
       <input type="text" class="notice text" name="oho-notice" id="oho-notice" title="<?php print t('What’s special about this instance?'); ?>" size="60" value="<%= notice %>" />
     </fieldset>
+
   </form>
 </script>
-
