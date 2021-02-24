@@ -182,6 +182,7 @@ function oc_template_overwrites_form_alter(&$form, &$form_state, $form_id) {
   if ($form_id == 'user_profile_form') {
     //dpm($form['#validate']);
     $form['#validate'][] = 'oc_template_overwrites_validate_user_phone';
+    $form['#validate'][] = 'oc_template_overwrites_validate_preferred_branch';
     $form['#validate'][] = 'oc_template_overwrites_validate_sync_user_email';
     //$form['profile_provider_fbs']['field_fbs_mail']['#attributes']['class'][] = 'js-hide';
     if (!strpos($test, 'admin') !== false) {
@@ -456,6 +457,19 @@ function oc_template_validate_material_description_list($form, &$form_state)
             }
         }
     }
+}
+/*
+ * Validate the preferred branch
+ * Prevent empty or excluded branch.
+ */
+function oc_template_overwrites_validate_preferred_branch($form, &$form_state)
+{
+  $preferred_branch = $form_state['values']['profile_provider_fbs']['field_fbs_preferred_branch']['und'][0]['value'];
+  if($preferred_branch == null)
+  {
+      //form_set_error('profile_provider_fbs][profile_provider_fbs',t('You have to choose a preferred branch'));
+      form_set_error('profile_provider_fbs][field_fbs_preferred_branch', t('You have to choose a preferred branch'));
+  }
 }
 /*
  * Validate the phone number used for SMS notifcations
