@@ -467,12 +467,14 @@ function oc_template_overwrites_inspirations_liste_node_form_validate($form, &$f
 {
   if (isset($form_state['values']['field_searches']['und'])) {
     $field_searches = $form_state['values']['field_searches']['und'];
+    $i = -1;
     foreach ($field_searches as $field_search_query) {
+      $i++;
       //extract tokens from field body.
       $matchCount = preg_match_all('/(\d{8}).*\1/', $field_search_query['field_search_query']['und'][0]['value'], $matches);
       if ($matchCount != 0) {
         //form_set_error('profile_provider_fbs][profile_provider_fbs',t('You have to choose a preferred branch'));
-        form_set_error('field_searches', t('Du skal vælge et unikt materiale'));
+        form_set_error('field_searches][und]['.$i.'][field_search_query', t('Fejl, der er indtastet samme faust nummer.'));
         return TRUE;
       }
     }
