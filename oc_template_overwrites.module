@@ -471,7 +471,7 @@ function oc_template_overwrites_inspirations_liste_node_form_validate($form, &$f
     foreach ($field_searches as $field_search_query) {
       $i++;
       //extract tokens from field body.
-      $matchCount = preg_match_all('/(\w{3}[0-9]{10}|\s[0-9]{8}).*\1/', $field_search_query['field_search_query']['und'][0]['value'], $matches);
+      $matchCount = preg_match_all('/(\D[0-9]{8}\D|\w{3}[0-9]{10}|\D[0-9]{13}\D).*\1/', $field_search_query['field_search_query']['und'][0]['value'], $matches);
       if ($matchCount != 0) {
         //form_set_error('profile_provider_fbs][profile_provider_fbs',t('You have to choose a preferred branch'));
         form_set_error('field_searches][und]['.$i.'][field_search_query', t('Fejl, der er indtastet samme faust nummer.'));
