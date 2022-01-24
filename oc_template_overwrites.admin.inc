@@ -254,7 +254,7 @@ function oc_template_overwrites_admin()
     '#options' => array(t('Slået Fra.'), t('Slået Til.')),
   );
   
-   
+  return system_settings_form($form);
   
 }
 function emergencymessage_form_admin($form)
