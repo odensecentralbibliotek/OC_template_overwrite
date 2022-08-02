@@ -489,7 +489,7 @@ function oc_template_overwrites_field_ding_news_materials_form_validate($form, &
       array_pop($result);
     }
     foreach($result as $identifier) {
-      if($identifier['identifier'] != "") {
+      if($identifier['identifier'] != "" && $identifier != "Tilføj endnu et element") {
         //form_set_error('profile_provider_fbs][profile_provider_fbs',t('You have to choose a preferred branch'));
         form_set_error('field_ding_news_materials', t('Du skal vælge et unikt materiale'));
         return TRUE;
