@@ -33,23 +33,22 @@ function oc_template_overwrites_views_pre_build(&$view)
  */
 function oc_template_overwrites_theme_registry_alter(&$theme_registry)
 {
-    if(isset($theme_registry["opening_hours_admin"]))
-    {
-        $OC_template_repo = drupal_get_path('module','oc_template_overwrites') . "/templates";
-        $theme_registry["opening_hours_admin"]["path"] = $OC_template_repo;
-    }
-    if(isset($theme_registry["file_entity"]))
-    {
-        $OC_template_repo = "file_entity";
-        $ModuleTemplatePath = drupal_get_path('module','oc_template_overwrites') . "/templates";
-        $theme_registry["file_entity"]["template"] = $OC_template_repo;
-        $theme_registry["file_entity"]["path"] =  $ModuleTemplatePath;	
-    }
+  if (isset($theme_registry["opening_hours_admin"])) {
+    $OC_template_repo = drupal_get_path('module', 'oc_template_overwrites') . "/templates";
+    $theme_registry["opening_hours_admin"]["path"] = $OC_template_repo;
+  }
+  if (isset($theme_registry["file_entity"])) {
+    $OC_template_repo = "file_entity";
+    $ModuleTemplatePath = drupal_get_path('module', 'oc_template_overwrites') . "/templates";
+    $theme_registry["file_entity"]["template"] = $OC_template_repo;
+    $theme_registry["file_entity"]["path"] = $ModuleTemplatePath;
+  }
 }
 /**
  * Implements hook_permission().
  */
-function oc_template_overwrites_permission() {
+function oc_template_overwrites_permission()
+{
   return array(
     'administer oc_template_overwrites' => array(
       'title' => t('Administrer oc_template_overwrites'),
@@ -61,7 +60,8 @@ function oc_template_overwrites_permission() {
 /*
  * 
  */
-function  oc_template_overwrites_menu() {
+function oc_template_overwrites_menu()
+{
   $items = array();
   $items['admin/settings/oc_template_overwrites'] = array(
     'title' => 'OC Overwrites',
@@ -70,9 +70,9 @@ function  oc_template_overwrites_menu() {
     'page arguments' => array('oc_template_overwrites_admin'),
     'access arguments' => array('administer oc_template_overwrites'),
     'file' => 'oc_template_overwrites.admin.inc'
-   );
+  );
 
-   $items['admin/content/emergencymessage'] = array(
+  $items['admin/content/emergencymessage'] = array(
     'title' => 'Indstill nødbesked',
     'description' => '',
     'page callback' => 'drupal_get_form',
@@ -80,7 +80,7 @@ function  oc_template_overwrites_menu() {
     'access arguments' => array('administer nodes'),
     'file' => 'oc_template_overwrites.admin.inc',
     'weight' => 999,
-   );
+  );
   return $items;
 }
 /*
@@ -88,101 +88,104 @@ function  oc_template_overwrites_menu() {
  */
 function oc_template_overwrites_preprocess_html(&$page)
 {
-    //Add javascript if we are on frontpage.
-    global $user;
-    $cur_path = current_path();
-    if($cur_path == "user/" . $user->uid)
-    {
-       drupal_add_js(drupal_get_path('module', 'oc_template_overwrites') ."/js/user_profile_attached.js");
-    }
-    $Path = drupal_get_path('module', 'oc_template_overwrites') . '/js/ting_tablesorter_parsers.js';
-    drupal_add_js(drupal_get_path('module', 'oc_template_overwrites') ."/js/ansat_table.js");
+  //Add javascript if we are on frontpage.
+  global $user;
+  $cur_path = current_path();
+  if ($cur_path == "user/" . $user->uid) {
+    drupal_add_js(drupal_get_path('module', 'oc_template_overwrites') . "/js/user_profile_attached.js");
+  }
+
+  // FBS fraværs mimimumsperiode
+  $holdMin = variable_get('fbs_res_on_hold_min', 0);
+  drupal_add_js(array('oc_template_overwrites' => array('holdMin' => $holdMin)), 'setting');
+
+  //
+  $Path = drupal_get_path('module', 'oc_template_overwrites') . '/js/ting_tablesorter_parsers.js';
+  drupal_add_js(drupal_get_path('module', 'oc_template_overwrites') . "/js/ansat_table.js");
+  drupal_add_js($Path);
+  if (drupal_is_front_page() && variable_get('Place2book_front_ticket_status', 0) == 1) //The setting has been enabled.
+  {
+    $Path = drupal_get_path('module', 'oc_template_overwrites') . "/js/p2b_frontpagestatus.js";
     drupal_add_js($Path);
-    if(drupal_is_front_page() && variable_get('Place2book_front_ticket_status', 0) == 1) //The setting has been enabled.
-    {
-        $Path = drupal_get_path('module', 'oc_template_overwrites') . "/js/p2b_frontpagestatus.js";
-        drupal_add_js($Path);
-    }
-    if (arg(0) == 'node' && arg(1) == 'add' || arg(2) == 'edit') {
-        //$path = drupal_get_path('module', 'oc_template_overwrites');  
-        //drupal_add_js($path . '/js/oc_material_descriptions.js',array('weight' => 999));
-    }
-    $config = array(
-            'nysfyn_link' => variable_get('nysfyn_home_page', ''),
-            'is_active' => variable_get('nysfyn_badge_enabled', 0),
-            'ding_opening_hours_expand_setting' => variable_get('ding_opening_hours_expand_setting', 'dont_expand'),
-            'google_translate_enabled' => variable_get('google_translate_enabled', 0),
-            'google_translate_languages' => variable_get('google_translate_languages', 'da,de,en,es,nl,no')
-           );
-          drupal_add_js(array('oc_template_overwrites' => $config), 'setting');
-  
-  if(drupal_is_front_page())
-    {
-    $meta_description = array(
-    '#type' => 'html_tag',
-    '#tag' => 'meta',
-    '#attributes' => array(     
-      'content' => variable_get('description_meta'),
-      'name' =>  'description',
-    )
+  }
+  if (arg(0) == 'node' && arg(1) == 'add' || arg(2) == 'edit') {
+    //$path = drupal_get_path('module', 'oc_template_overwrites');  
+    //drupal_add_js($path . '/js/oc_material_descriptions.js',array('weight' => 999));
+  }
+  $config = array(
+    'nysfyn_link' => variable_get('nysfyn_home_page', ''),
+    'is_active' => variable_get('nysfyn_badge_enabled', 0),
+    'ding_opening_hours_expand_setting' => variable_get('ding_opening_hours_expand_setting', 'dont_expand'),
+    'google_translate_enabled' => variable_get('google_translate_enabled', 0),
+    'google_translate_languages' => variable_get('google_translate_languages', 'da,de,en,es,nl,no')
   );
-      drupal_add_html_head($meta_description, 'meta_description');  
-    }        
- // Setup IE meta tag to force IE rendering mode
+  drupal_add_js(array('oc_template_overwrites' => $config), 'setting');
+
+  if (drupal_is_front_page()) {
+    $meta_description = array(
+      '#type' => 'html_tag',
+      '#tag' => 'meta',
+      '#attributes' => array(
+        'content' => variable_get('description_meta'),
+        'name' => 'description',
+      )
+    );
+    drupal_add_html_head($meta_description, 'meta_description');
+  }
+  // Setup IE meta tag to force IE rendering mode
   $meta_ie_render_engine = array(
     '#type' => 'html_tag',
     '#tag' => 'meta',
     '#attributes' => array(
-      'content' =>  'IE=Edge',
+      'content' => 'IE=Edge',
       'http-equiv' => 'X-UA-Compatible',
     )
   );
   // Add header meta tag for IE to head
   drupal_add_html_head($meta_ie_render_engine, 'meta_ie_render_engine');
-  if(variable_get('oc_survey_xact_enabled', 0))
-  {
-       $link_id = variable_get('oc_survey_xact_survey_id', '');
-      drupal_add_css("https://popin.survey-xact.dk/popin/popin.css", 'external');
-      drupal_add_css(drupal_get_path('module', 'oc_template_overwrites') . "/css/oc_survey_xact.css");
-      //drupal_add_js(drupal_get_path('theme', 'latto_odense') . "/js/popintest.js");
-      drupal_add_js("https://popin.survey-xact.dk/popin/popin.js", 'external');
-      drupal_add_js("https://popin.survey-xact.dk/dynjs/".$link_id."/popin.js", 'external');
-      drupal_add_js("https://popin.survey-xact.dk/cookies.js" , 'external');
-      
-      /*
-       * Add js setting.
-       */
-      drupal_add_js(array('oc_template_overwrites' => array('xact_survey_enabled' => variable_get('oc_survey_xact_enabled', 0))), 'setting');
-      drupal_add_js(array('oc_template_overwrites' => array('xact_survey_id' => $link_id)), 'setting');
-      
-      drupal_add_js(drupal_get_path('module', 'oc_template_overwrites') ."/js/oc_survey_xact.js");
+  if (variable_get('oc_survey_xact_enabled', 0)) {
+    $link_id = variable_get('oc_survey_xact_survey_id', '');
+    drupal_add_css("https://popin.survey-xact.dk/popin/popin.css", 'external');
+    drupal_add_css(drupal_get_path('module', 'oc_template_overwrites') . "/css/oc_survey_xact.css");
+    //drupal_add_js(drupal_get_path('theme', 'latto_odense') . "/js/popintest.js");
+    drupal_add_js("https://popin.survey-xact.dk/popin/popin.js", 'external');
+    drupal_add_js("https://popin.survey-xact.dk/dynjs/" . $link_id . "/popin.js", 'external');
+    drupal_add_js("https://popin.survey-xact.dk/cookies.js", 'external');
+
+    /*
+     * Add js setting.
+     */
+    drupal_add_js(array('oc_template_overwrites' => array('xact_survey_enabled' => variable_get('oc_survey_xact_enabled', 0))), 'setting');
+    drupal_add_js(array('oc_template_overwrites' => array('xact_survey_id' => $link_id)), 'setting');
+
+    drupal_add_js(drupal_get_path('module', 'oc_template_overwrites') . "/js/oc_survey_xact.js");
   }
   /*
    * Insert needed data for custom surveys that are not created with survey xact.
    */
-  if(variable_get('oc_custom_survey_enabled',0) && !path_is_admin(current_path()))
-  {
-      drupal_add_js(drupal_get_path('module', 'oc_template_overwrites') ."/js/oc_custom_survey.js");
-      drupal_add_js(array('oc_template_overwrites' => array('oc_custom_survey_enabled' => variable_get('oc_custom_survey_enabled', 0))), 'setting');
-      drupal_add_js(array('oc_template_overwrites' => array('oc_custom_survey_link' => variable_get('oc_custom_survey_link',0))), 'setting');
-      drupal_add_js(array('oc_template_overwrites' => array('oc_custom_survey_teaser_html' => variable_get('oc_custom_survey_teaser_html',0))), 'setting');
-      drupal_add_js(array('oc_template_overwrites' => array('oc_custom_survey_title' => variable_get('oc_custom_survey_title',0))), 'setting');
-      
-      drupal_add_js(array('oc_template_overwrites' => array('oc_custom_survey_start_date' => strtotime(variable_get('oc_custom_survey_start_date',0)))), 'setting');
-      drupal_add_js(array('oc_template_overwrites' => array('oc_custom_survey_end_date' => strtotime(variable_get('oc_custom_survey_end_date',0)))), 'setting');
-      drupal_add_css(drupal_get_path('module', 'oc_template_overwrites') . "/css/jquery.dialog.overwrites.css");
-      drupal_add_library('system', 'jquery.cookie');
+  if (variable_get('oc_custom_survey_enabled', 0) && !path_is_admin(current_path())) {
+    drupal_add_js(drupal_get_path('module', 'oc_template_overwrites') . "/js/oc_custom_survey.js");
+    drupal_add_js(array('oc_template_overwrites' => array('oc_custom_survey_enabled' => variable_get('oc_custom_survey_enabled', 0))), 'setting');
+    drupal_add_js(array('oc_template_overwrites' => array('oc_custom_survey_link' => variable_get('oc_custom_survey_link', 0))), 'setting');
+    drupal_add_js(array('oc_template_overwrites' => array('oc_custom_survey_teaser_html' => variable_get('oc_custom_survey_teaser_html', 0))), 'setting');
+    drupal_add_js(array('oc_template_overwrites' => array('oc_custom_survey_title' => variable_get('oc_custom_survey_title', 0))), 'setting');
+
+    drupal_add_js(array('oc_template_overwrites' => array('oc_custom_survey_start_date' => strtotime(variable_get('oc_custom_survey_start_date', 0)))), 'setting');
+    drupal_add_js(array('oc_template_overwrites' => array('oc_custom_survey_end_date' => strtotime(variable_get('oc_custom_survey_end_date', 0)))), 'setting');
+    drupal_add_css(drupal_get_path('module', 'oc_template_overwrites') . "/css/jquery.dialog.overwrites.css");
+    drupal_add_library('system', 'jquery.cookie');
   }
 }
 /*
  * Contains various form alterations.
  */
 
-function oc_template_overwrites_form_alter(&$form, &$form_state, $form_id) {
+function oc_template_overwrites_form_alter(&$form, &$form_state, $form_id)
+{
   if ($form_id == "inspirations_liste_node_form" || $form_id == "obb_search_carousel_node_form") {
     $form['#validate'][] = 'oc_template_overwrites_inspirations_liste_node_form_validate';
   }
-    
+
   if ($form_id == 'user_profile_form') {
     //dpm($form['#validate']);
     $form['#validate'][] = 'oc_template_overwrites_validate_user_phone';
@@ -190,225 +193,200 @@ function oc_template_overwrites_form_alter(&$form, &$form_state, $form_id) {
     $form['#validate'][] = 'oc_template_overwrites_validate_sync_user_email';
     //$form['profile_provider_fbs']['field_fbs_mail']['#attributes']['class'][] = 'js-hide';
     if (!strpos($test, 'admin') !== false) {
-    $form['account']['mail']['#attributes']['class'][] = 'js-hide';
-    $form['account']['mail']['#title_display']='invisible';
+      $form['account']['mail']['#attributes']['class'][] = 'js-hide';
+      $form['account']['mail']['#title_display'] = 'invisible';
     }
     /*
-    * Add JS
-    */
-     $form['#attached']['js'] = array(
-     drupal_get_path('module', 'oc_template_overwrites') . '/js/user_profile_attached.js',
-     );
-     /*
-      * Rearrange fields so they reflect the use cases better
-      */
-     
-   
-  }
-  elseif($form_id == 'ding_event_node_form')
-  {
-      foreach($form['field_ding_event_library']['und']['#options'] as $key=>$value) {
-          $val = substr($value, 0, 6);
-          if($val == 'Little' || $value == 'Borgernes Hus Pop-Up'){
-              unset($form['field_ding_event_library']['und']['#options'][$key]);
-          }
-      }
+     * Add JS
+     */
+    $form['#attached']['js'] = array(
+      drupal_get_path('module', 'oc_template_overwrites') . '/js/user_profile_attached.js',
+    );
+    /*
+     * Rearrange fields so they reflect the use cases better
+     */
 
-  }
-  elseif($form_id == 'ding_page_node_form')
-  {
-      /*
-       * Add submit handler to ensure if material description fields exists
-       * it does now grow automaticly without connected materials.
-       */
-      $form['#submit'][] = 'oc_template_validate_material_description_list';
-       /*
-       * Ding news lead length warning
-       */
-      drupal_add_js(drupal_get_path('module', 'oc_template_overwrites') ."/js/oc_ting_reference_cover_preview_page.js");
-      
-      drupal_add_js(array('oc_template_overwrites' => array('oc_ding_news_lead_warning_limit' => variable_get('oc_ding_news_lead_warning_limit', 150) , 'oc_material_img_preview_enabled' => variable_get('oc_material_img_preview_enabled',0))), 'setting');
-      /*
-       * Add submit handler to ensure if material description fields exists
-       * it does now grow automaticly without connected materials.
-       */
-      $form['#submit'][] = 'oc_template_validate_material_description_list';
-        if(variable_get('oc_material_descriptions_enabled',0) && isset($form['field_ding_page_material_descrip']['und']))
-        {
-                $form['#attached']['css'] = array(
-                  drupal_get_path('module', 'oc_template_overwrites') . '/css/material_descriptions.css',
-                );
 
-                $form['#attached']['js'] = array(
-                  drupal_get_path('module', 'oc_template_overwrites') . '/js/material_descriptions_page.js',
-                );
-                foreach($form['field_ding_page_material_descrip']['und'] as $index => $elem)
-                {
-                    if(is_array($elem) && isset($elem['#field_name']) && 
-                            $elem['#field_name'] == 'field_ding_page_material_descrip' 
-                            && isset($elem['value']) && is_array($elem['value']))
-                    {
-                        if($form['field_ding_page_material_descrip']['und'][$index]['value']['#default_value'] == ".")
-                        {
-                            $form['field_ding_page_material_descrip']['und'][$index]['value']['#default_value'] = '';
-                        }
-                    }
-                }
-          }
-      else
-      {
-          //Hide the descriptions
-           $form['#attached']['css'] = array(
-              drupal_get_path('module', 'oc_template_overwrites') . '/css/material_descriptions_disabled.css',
-            );
+  } elseif ($form_id == 'ding_event_node_form') {
+    foreach ($form['field_ding_event_library']['und']['#options'] as $key => $value) {
+      $val = substr($value, 0, 6);
+      if ($val == 'Little' || $value == 'Borgernes Hus Pop-Up') {
+        unset($form['field_ding_event_library']['und']['#options'][$key]);
       }
-  }
-  elseif($form_id == 'ding_news_node_form')
-  {
-    $form['#validate'][] = 'oc_template_overwrites_field_ding_news_materials_form_validate';
-      /*
-       * Ding news lead length warning
-       */
-      drupal_add_js(drupal_get_path('module', 'oc_template_overwrites') ."/js/oc_ting_reference_cover_preview.js");
-      
-      drupal_add_js(drupal_get_path('module', 'oc_template_overwrites') ."/js/ding_news_lead_warning.js");
-      drupal_add_js(array('oc_template_overwrites' => array('oc_ding_news_lead_warning_limit' => variable_get('oc_ding_news_lead_warning_limit', 150) , 'oc_material_img_preview_enabled' => variable_get('oc_material_img_preview_enabled',0))), 'setting');
-      /*
-       * Add submit handler to ensure if material description fields exists
-       * it does now grow automaticly without connected materials.
-       */
-      $form['#submit'][] = 'oc_template_validate_material_description_list';
-    if(variable_get('oc_material_descriptions_enabled',0) && isset($form['field_ding_news_material_descrip']['und']))
-    {
-            $form['#attached']['css'] = array(
-              drupal_get_path('module', 'oc_template_overwrites') . '/css/material_descriptions.css',
-            );
+    }
 
-            $form['#attached']['js'] = array(
-              drupal_get_path('module', 'oc_template_overwrites') . '/js/material_descriptions.js',
-            );
-            foreach($form['field_ding_news_material_descrip']['und'] as $index => $elem)
-            {
-                if(is_array($elem) && isset($elem['#field_name']) && 
-                        $elem['#field_name'] == 'field_ding_news_material_descrip' 
-                        && isset($elem['value']) && is_array($elem['value']))
-                {
-                    if($form['field_ding_news_material_descrip']['und'][$index]['value']['#default_value'] == ".")
-                    {
-                        $form['field_ding_news_material_descrip']['und'][$index]['value']['#default_value'] = '';
-                    }
-                }
-            }
-      }
-      else
-      {
-          //Hide the descriptions
-           $form['#attached']['css'] = array(
-              drupal_get_path('module', 'oc_template_overwrites') . '/css/material_descriptions_disabled.css',
-            );
-      }
-      
-      /*
-       * Only add button if node is already created.
-       */
-       if(variable_get('oc_survey_bpi_buttons_enabled',0))
-       {
-           if(is_array( $form['#attached']['css']))
-           {
-                $form['#attached']['css'][] = drupal_get_path('module', 'oc_template_overwrites') . '/css/bpi.css';
-           }
-           else
-           {
-               //Hide the descriptions
-                $form['#attached']['css'] = array(
-                   drupal_get_path('module', 'oc_template_overwrites') . '/css/bpi.css',
-                 );
-           }
-          if(isset($form['#node']->nid) && $form['#node']->field_bpi_workflow['und']['0']['value'] != variable_get('oc_bpi_send_to_state_sid',11)
-                  && $form['#node']->field_bpi_workflow['und']['0']['value'] != variable_get('oc_bpi_crated_from_state_sid',0)
-                  && user_access('bpi push content'))
-          {
-              
-              $form['actions']['submit2'] = array(
-                '#type' => 'submit', 
-                '#value' => t('Send til bpi'),
-                '#validate' => array('oc_template_overwrites_bpi_custom_syndicate'),
-                '#submit' => array('node_form_submit'),
-                '#weight' => 50
-              );
-          }
-          elseif(isset($form['#node']->nid) && $form['#node']->field_bpi_workflow['und']['0']['value'] == variable_get('oc_bpi_send_to_state_sid',0)
-                 && user_access('delete bpi content'))
-          {
-              $form['actions']['submit2'] = array(
-                '#type' => 'submit', 
-                '#value' => t('Slet fra bpi'),
-                '#validate' => array('oc_template_overwrites_bpi_custom_delete'),
-                '#submit' => array('node_form_submit'),
-                '#weight' => 50
-              );
-          }
-          elseif(isset($_GET['bpi_id']))
-          {
-              /*
-               * Make sure we give correct state to content created from BPI.
-               */
-              if(variable_get('oc_bpi_crated_from_state_sid',0) != 0)
-              {
-                //$form['field_bpi_workflow']['und'][0]['workflow']['#default_value']  = variable_get('oc_bpi_crated_from_state_sid',0);
-                $form['field_bpi_workflow']['und'][0]['workflow']['workflow_sid']['#default_value']  = variable_get('oc_bpi_crated_from_state_sid',0);
-              }
+  } elseif ($form_id == 'ding_page_node_form') {
+    /*
+     * Add submit handler to ensure if material description fields exists
+     * it does now grow automaticly without connected materials.
+     */
+    $form['#submit'][] = 'oc_template_validate_material_description_list';
+    /*
+     * Ding news lead length warning
+     */
+    drupal_add_js(drupal_get_path('module', 'oc_template_overwrites') . "/js/oc_ting_reference_cover_preview_page.js");
 
+    drupal_add_js(array('oc_template_overwrites' => array('oc_ding_news_lead_warning_limit' => variable_get('oc_ding_news_lead_warning_limit', 150), 'oc_material_img_preview_enabled' => variable_get('oc_material_img_preview_enabled', 0))), 'setting');
+    /*
+     * Add submit handler to ensure if material description fields exists
+     * it does now grow automaticly without connected materials.
+     */
+    $form['#submit'][] = 'oc_template_validate_material_description_list';
+    if (variable_get('oc_material_descriptions_enabled', 0) && isset($form['field_ding_page_material_descrip']['und'])) {
+      $form['#attached']['css'] = array(
+        drupal_get_path('module', 'oc_template_overwrites') . '/css/material_descriptions.css',
+      );
+
+      $form['#attached']['js'] = array(
+        drupal_get_path('module', 'oc_template_overwrites') . '/js/material_descriptions_page.js',
+      );
+      foreach ($form['field_ding_page_material_descrip']['und'] as $index => $elem) {
+        if (
+          is_array($elem) && isset($elem['#field_name']) &&
+          $elem['#field_name'] == 'field_ding_page_material_descrip'
+          && isset($elem['value']) && is_array($elem['value'])
+        ) {
+          if ($form['field_ding_page_material_descrip']['und'][$index]['value']['#default_value'] == ".") {
+            $form['field_ding_page_material_descrip']['und'][$index]['value']['#default_value'] = '';
           }
         }
+      }
+    } else {
+      //Hide the descriptions
+      $form['#attached']['css'] = array(
+        drupal_get_path('module', 'oc_template_overwrites') . '/css/material_descriptions_disabled.css',
+      );
+    }
+  } elseif ($form_id == 'ding_news_node_form') {
+    $form['#validate'][] = 'oc_template_overwrites_field_ding_news_materials_form_validate';
+    /*
+     * Ding news lead length warning
+     */
+    drupal_add_js(drupal_get_path('module', 'oc_template_overwrites') . "/js/oc_ting_reference_cover_preview.js");
+
+    drupal_add_js(drupal_get_path('module', 'oc_template_overwrites') . "/js/ding_news_lead_warning.js");
+    drupal_add_js(array('oc_template_overwrites' => array('oc_ding_news_lead_warning_limit' => variable_get('oc_ding_news_lead_warning_limit', 150), 'oc_material_img_preview_enabled' => variable_get('oc_material_img_preview_enabled', 0))), 'setting');
+    /*
+     * Add submit handler to ensure if material description fields exists
+     * it does now grow automaticly without connected materials.
+     */
+    $form['#submit'][] = 'oc_template_validate_material_description_list';
+    if (variable_get('oc_material_descriptions_enabled', 0) && isset($form['field_ding_news_material_descrip']['und'])) {
+      $form['#attached']['css'] = array(
+        drupal_get_path('module', 'oc_template_overwrites') . '/css/material_descriptions.css',
+      );
+
+      $form['#attached']['js'] = array(
+        drupal_get_path('module', 'oc_template_overwrites') . '/js/material_descriptions.js',
+      );
+      foreach ($form['field_ding_news_material_descrip']['und'] as $index => $elem) {
+        if (
+          is_array($elem) && isset($elem['#field_name']) &&
+          $elem['#field_name'] == 'field_ding_news_material_descrip'
+          && isset($elem['value']) && is_array($elem['value'])
+        ) {
+          if ($form['field_ding_news_material_descrip']['und'][$index]['value']['#default_value'] == ".") {
+            $form['field_ding_news_material_descrip']['und'][$index]['value']['#default_value'] = '';
+          }
+        }
+      }
+    } else {
+      //Hide the descriptions
+      $form['#attached']['css'] = array(
+        drupal_get_path('module', 'oc_template_overwrites') . '/css/material_descriptions_disabled.css',
+      );
+    }
+
+    /*
+     * Only add button if node is already created.
+     */
+    if (variable_get('oc_survey_bpi_buttons_enabled', 0)) {
+      if (is_array($form['#attached']['css'])) {
+        $form['#attached']['css'][] = drupal_get_path('module', 'oc_template_overwrites') . '/css/bpi.css';
+      } else {
+        //Hide the descriptions
+        $form['#attached']['css'] = array(
+          drupal_get_path('module', 'oc_template_overwrites') . '/css/bpi.css',
+        );
+      }
+      if (
+        isset($form['#node']->nid) && $form['#node']->field_bpi_workflow['und']['0']['value'] != variable_get('oc_bpi_send_to_state_sid', 11)
+        && $form['#node']->field_bpi_workflow['und']['0']['value'] != variable_get('oc_bpi_crated_from_state_sid', 0)
+        && user_access('bpi push content')
+      ) {
+
+        $form['actions']['submit2'] = array(
+          '#type' => 'submit',
+          '#value' => t('Send til bpi'),
+          '#validate' => array('oc_template_overwrites_bpi_custom_syndicate'),
+          '#submit' => array('node_form_submit'),
+          '#weight' => 50
+        );
+      } elseif (
+        isset($form['#node']->nid) && $form['#node']->field_bpi_workflow['und']['0']['value'] == variable_get('oc_bpi_send_to_state_sid', 0)
+        && user_access('delete bpi content')
+      ) {
+        $form['actions']['submit2'] = array(
+          '#type' => 'submit',
+          '#value' => t('Slet fra bpi'),
+          '#validate' => array('oc_template_overwrites_bpi_custom_delete'),
+          '#submit' => array('node_form_submit'),
+          '#weight' => 50
+        );
+      } elseif (isset($_GET['bpi_id'])) {
+        /*
+         * Make sure we give correct state to content created from BPI.
+         */
+        if (variable_get('oc_bpi_crated_from_state_sid', 0) != 0) {
+          //$form['field_bpi_workflow']['und'][0]['workflow']['#default_value']  = variable_get('oc_bpi_crated_from_state_sid',0);
+          $form['field_bpi_workflow']['und'][0]['workflow']['workflow_sid']['#default_value'] = variable_get('oc_bpi_crated_from_state_sid', 0);
+        }
+
+      }
+    }
   }
 
 }
 function oc_template_overwrites_bpi_custom_lokal_content(&$form, &$form_state)
 {
-  
+
 }
 function oc_template_overwrites_bpi_custom_syndicate(&$form, &$form_state)
 {
-    $form_state['values']['field_bpi_workflow']['und']['0']['workflow']['workflow_sid'] = variable_get('oc_bpi_send_to_state_sid',11);
-    array_unshift($form_state['submit_handlers'], 'bpi_form_workflow_transition_form_submit');
+  $form_state['values']['field_bpi_workflow']['und']['0']['workflow']['workflow_sid'] = variable_get('oc_bpi_send_to_state_sid', 11);
+  array_unshift($form_state['submit_handlers'], 'bpi_form_workflow_transition_form_submit');
 }
 function oc_template_overwrites_bpi_custom_delete(&$form, &$form_state)
 {
-    $form_state['values']['field_bpi_workflow']['und']['0']['workflow']['workflow_sid'] = variable_get('oc_bpi_delete_state_sid',14);
+  $form_state['values']['field_bpi_workflow']['und']['0']['workflow']['workflow_sid'] = variable_get('oc_bpi_delete_state_sid', 14);
 }
 /*
  * Help dennish to eu stats.
  */
 function oc_template_overwrites_pathauto_alias_alter(&$alias, $context)
 {
-    /*
-     * Alter the path to be better eu minded.
-     */
-    if($context['data']['node']->type == "ding_news")
-    {
-        if($context['data']['node']->field_ding_news_category['und'][0]['tid'] == 140)
-        {
-            $secured_string = explode('/',$alias);
-            $alias = $secured_string[0] . "/eu/" . $secured_string[1];
-        }
-        /*elseif(strpos($alias, '/eu/') !== false)
-        {
-            $secured_string = explode('/',$alias);
-            $alias = $secured_string[0] . "/" . $secured_string[1];
-        }*/
+  /*
+   * Alter the path to be better eu minded.
+   */
+  if ($context['data']['node']->type == "ding_news") {
+    if ($context['data']['node']->field_ding_news_category['und'][0]['tid'] == 140) {
+      $secured_string = explode('/', $alias);
+      $alias = $secured_string[0] . "/eu/" . $secured_string[1];
     }
-    if($context['data']['node']->type == "ding_event")
+    /*elseif(strpos($alias, '/eu/') !== false)
     {
-        if(isset($context['data']['node']->field_eu_arrangement))
-        {
-            if($context['data']['node']->field_eu_arrangement['und'][0]['value'] == 1)
-            {
-                $secured_string = explode('/',$alias);
-                $alias = $secured_string[0] . "/eu/" . $secured_string[1];
-            }
-        }
+        $secured_string = explode('/',$alias);
+        $alias = $secured_string[0] . "/" . $secured_string[1];
+    }*/
+  }
+  if ($context['data']['node']->type == "ding_event") {
+    if (isset($context['data']['node']->field_eu_arrangement)) {
+      if ($context['data']['node']->field_eu_arrangement['und'][0]['value'] == 1) {
+        $secured_string = explode('/', $alias);
+        $alias = $secured_string[0] . "/eu/" . $secured_string[1];
+      }
     }
+  }
 }
 /*
  * Make sure the material description lists does not grow unintended beyond
@@ -416,52 +394,50 @@ function oc_template_overwrites_pathauto_alias_alter(&$alias, $context)
  */
 function oc_template_validate_material_description_list($form, &$form_state)
 {
-    /* Get the number of materials and descriptions. remove one to account for
-     * add more btn. */
-    if(isset($form_state['values']['field_ding_news_material_descrip']))
-    {
-        $Material_descrip_count = sizeof($form_state['values']['field_ding_news_material_descrip']['und'])-1;
-        $Material_count = sizeof($form_state['values']['field_ding_news_materials']['und'])-1;
-        for($i = 0; $i < $Material_descrip_count;$i++)
-        {
-            if(!isset($form_state['values']['field_ding_news_materials']['und'][$i]) || 
-                    $form_state['values']['field_ding_news_materials']['und'][$i]['identifier'] == "")
-            {
-                $form_state['values']['field_ding_news_material_descrip']['und'][$i]['value'] = "";
-            }
-            elseif(isset($form_state['values']['field_ding_news_materials']['und'][$i]) &&
-                   $form_state['values']['field_ding_news_material_descrip']['und'][$i]['value'] == "" )
-            {
-                /*
-                 * Save the user incase they delete all text from input , and
-                 * dont set a . to make it save proper. invalidating the list.
-                 */
-                 $form_state['values']['field_ding_news_material_descrip']['und'][$i]['value'] = ".";
-            }
-        }
+  /* Get the number of materials and descriptions. remove one to account for
+   * add more btn. */
+  if (isset($form_state['values']['field_ding_news_material_descrip'])) {
+    $Material_descrip_count = sizeof($form_state['values']['field_ding_news_material_descrip']['und']) - 1;
+    $Material_count = sizeof($form_state['values']['field_ding_news_materials']['und']) - 1;
+    for ($i = 0; $i < $Material_descrip_count; $i++) {
+      if (
+        !isset($form_state['values']['field_ding_news_materials']['und'][$i]) ||
+        $form_state['values']['field_ding_news_materials']['und'][$i]['identifier'] == ""
+      ) {
+        $form_state['values']['field_ding_news_material_descrip']['und'][$i]['value'] = "";
+      } elseif (
+        isset($form_state['values']['field_ding_news_materials']['und'][$i]) &&
+        $form_state['values']['field_ding_news_material_descrip']['und'][$i]['value'] == ""
+      ) {
+        /*
+         * Save the user incase they delete all text from input , and
+         * dont set a . to make it save proper. invalidating the list.
+         */
+        $form_state['values']['field_ding_news_material_descrip']['und'][$i]['value'] = ".";
+      }
     }
-    if(isset($form_state['values']['field_ding_page_material_descrip']))
-    {
-        $Material_descrip_count = sizeof($form_state['values']['field_ding_page_material_descrip']['und'])-1;
-        $Material_count = sizeof($form_state['values']['field_ding_page_materials']['und'])-1;
-        for($i = 0; $i < $Material_descrip_count;$i++)
-        {
-            if(!isset($form_state['values']['field_ding_page_materials']['und'][$i]) || 
-                    $form_state['values']['field_ding_page_materials']['und'][$i]['identifier'] == "")
-            {
-                $form_state['values']['field_ding_page_material_descrip']['und'][$i]['value'] = "";
-            }
-            elseif(isset($form_state['values']['field_ding_page_materials']['und'][$i]) &&
-                   $form_state['values']['field_ding_page_material_descrip']['und'][$i]['value'] == "" )
-            {
-                /*
-                 * Save the user incase they delete all text from input , and
-                 * dont set a . to make it save proper. invalidating the list.
-                 */
-                 $form_state['values']['field_ding_page_material_descrip']['und'][$i]['value'] = ".";
-            }
-        }
+  }
+  if (isset($form_state['values']['field_ding_page_material_descrip'])) {
+    $Material_descrip_count = sizeof($form_state['values']['field_ding_page_material_descrip']['und']) - 1;
+    $Material_count = sizeof($form_state['values']['field_ding_page_materials']['und']) - 1;
+    for ($i = 0; $i < $Material_descrip_count; $i++) {
+      if (
+        !isset($form_state['values']['field_ding_page_materials']['und'][$i]) ||
+        $form_state['values']['field_ding_page_materials']['und'][$i]['identifier'] == ""
+      ) {
+        $form_state['values']['field_ding_page_material_descrip']['und'][$i]['value'] = "";
+      } elseif (
+        isset($form_state['values']['field_ding_page_materials']['und'][$i]) &&
+        $form_state['values']['field_ding_page_material_descrip']['und'][$i]['value'] == ""
+      ) {
+        /*
+         * Save the user incase they delete all text from input , and
+         * dont set a . to make it save proper. invalidating the list.
+         */
+        $form_state['values']['field_ding_page_material_descrip']['und'][$i]['value'] = ".";
+      }
     }
+  }
 }
 function oc_template_overwrites_inspirations_liste_node_form_validate($form, &$form_state)
 {
@@ -474,7 +450,7 @@ function oc_template_overwrites_inspirations_liste_node_form_validate($form, &$f
       $matchCount = preg_match_all('/(\D[0-9]{8}\D|\w{3}[0-9]{10}|\D[0-9]{13}\D).*\1/', $field_search_query['field_search_query']['und'][0]['value'], $matches);
       if ($matchCount != 0) {
         //form_set_error('profile_provider_fbs][profile_provider_fbs',t('You have to choose a preferred branch'));
-        form_set_error('field_searches][und]['.$i.'][field_search_query', t('Fejl, der er indtastet samme faust nummer.'));
+        form_set_error('field_searches][und][' . $i . '][field_search_query', t('Fejl, der er indtastet samme faust nummer.'));
         return TRUE;
       }
     }
@@ -482,32 +458,33 @@ function oc_template_overwrites_inspirations_liste_node_form_validate($form, &$f
 }
 function oc_template_overwrites_field_ding_news_materials_form_validate($form, &$form_state)
 {
-    if(isset($form_state['values']['field_ding_news_materials']['und'])){
-      $array1 = $form_state['values']['field_ding_news_materials']['und'];
-      $array2 = unique_multidim_array($form_state['values']['field_ding_news_materials']['und'],'identifier');
-      $result = array_diff_assoc($array1, $array2);
-      array_pop($result);
+  if (isset($form_state['values']['field_ding_news_materials']['und'])) {
+    $array1 = $form_state['values']['field_ding_news_materials']['und'];
+    $array2 = unique_multidim_array($form_state['values']['field_ding_news_materials']['und'], 'identifier');
+    $result = array_diff_assoc($array1, $array2);
+    array_pop($result);
+  }
+  foreach ($result as $identifier) {
+    if ($identifier['identifier'] != "" && $identifier != "Tilføj endnu et element") {
+      //form_set_error('profile_provider_fbs][profile_provider_fbs',t('You have to choose a preferred branch'));
+      form_set_error('field_ding_news_materials', t('Du skal vælge et unikt materiale'));
+      return TRUE;
     }
-    foreach($result as $identifier) {
-      if($identifier['identifier'] != "" && $identifier != "Tilføj endnu et element") {
-        //form_set_error('profile_provider_fbs][profile_provider_fbs',t('You have to choose a preferred branch'));
-        form_set_error('field_ding_news_materials', t('Du skal vælge et unikt materiale'));
-        return TRUE;
-      }
-    }
+  }
 }
 
-function unique_multidim_array($array, $key) {
+function unique_multidim_array($array, $key)
+{
   $temp_array = array();
   $i = 0;
   $key_array = array();
- 
-  foreach($array as $val) {
-      if (!in_array($val[$key], $key_array)) {
-          $key_array[$i] = $val[$key];
-          $temp_array[$i] = $val;
-      }
-      $i++;
+
+  foreach ($array as $val) {
+    if (!in_array($val[$key], $key_array)) {
+      $key_array[$i] = $val[$key];
+      $temp_array[$i] = $val;
+    }
+    $i++;
   }
   return $temp_array;
 }
@@ -518,11 +495,10 @@ function unique_multidim_array($array, $key) {
 function oc_template_overwrites_preferred_branch_form_validate($form, &$form_state)
 {
   $preferred_branch = $form_state['values']['profile_provider_fbs']['field_fbs_preferred_branch']['und'][0]['value'];
-  if($preferred_branch == null)
-  {
-      //form_set_error('profile_provider_fbs][profile_provider_fbs',t('You have to choose a preferred branch'));
-      form_set_error('profile_provider_fbs][field_fbs_preferred_branch', t('You have to choose a preferred branch'));
-      return FALSE;
+  if ($preferred_branch == null) {
+    //form_set_error('profile_provider_fbs][profile_provider_fbs',t('You have to choose a preferred branch'));
+    form_set_error('profile_provider_fbs][field_fbs_preferred_branch', t('You have to choose a preferred branch'));
+    return FALSE;
   }
 }
 /*
@@ -531,98 +507,92 @@ function oc_template_overwrites_preferred_branch_form_validate($form, &$form_sta
  */
 function oc_template_overwrites_validate_user_phone($form, &$form_state)
 {
-    $errors = array();
-    $phone_number = $form_state['values']['profile_provider_fbs']['field_fbs_phone']['und']['0']['value'];
-    /*
-     * Allow phone number field to be empty in case
-     * patrons dont want to attach phone number.
-     */	
-    if($phone_number == "" && $form_state['values']['profile_provider_fbs']['field_fbs_phone_notification'][0]['und']['value'] == 0)
-    {
-        return;
-    }
-    if($phone_number == "" && $form_state['values']['profile_provider_fbs']['field_fbs_phone_notification'][0]['und']['value'] == 1)
-    {
-        form_set_error('profile_provider_fbs][field_fbs_mobile_phone',t('Cant use sms service without a phone number.'));
-        return;
-    }
-    if(!ctype_digit($phone_number))
-    {
-        array_push($errors,t('Phone number must be numeric'));
-    }
-    $phone_lenght = strlen($phone_number);
-    if($phone_lenght > 0 && $phone_lenght != 8)
-    {
-        array_push($errors,t('Phone number must be excactly 8 chars'));
-    }
-    if ($errors) {
-        form_set_error_multiple('profile_provider_fbs][field_fbs_mobile_phone', $errors);
-    }
+  $errors = array();
+  $phone_number = $form_state['values']['profile_provider_fbs']['field_fbs_phone']['und']['0']['value'];
+  /*
+   * Allow phone number field to be empty in case
+   * patrons dont want to attach phone number.
+   */
+  if ($phone_number == "" && $form_state['values']['profile_provider_fbs']['field_fbs_phone_notification'][0]['und']['value'] == 0) {
+    return;
+  }
+  if ($phone_number == "" && $form_state['values']['profile_provider_fbs']['field_fbs_phone_notification'][0]['und']['value'] == 1) {
+    form_set_error('profile_provider_fbs][field_fbs_mobile_phone', t('Cant use sms service without a phone number.'));
+    return;
+  }
+  if (!ctype_digit($phone_number)) {
+    array_push($errors, t('Phone number must be numeric'));
+  }
+  $phone_lenght = strlen($phone_number);
+  if ($phone_lenght > 0 && $phone_lenght != 8) {
+    array_push($errors, t('Phone number must be excactly 8 chars'));
+  }
+  if ($errors) {
+    form_set_error_multiple('profile_provider_fbs][field_fbs_mobile_phone', $errors);
+  }
 }
 function oc_template_overwrites_validate_sync_user_email($form, &$form_state)
 {
-    $email = $form_state['values']['profile_provider_fbs']['field_fbs_mail']['und']['0']['value'];
-    $form_state['values']['mail'] = $email;
+  $email = $form_state['values']['profile_provider_fbs']['field_fbs_mail']['und']['0']['value'];
+  $form_state['values']['mail'] = $email;
 }
 /*
  * Helper to set multiple errors for 1 field.
  * http://drupal.stackexchange.com/questions/8327/how-to-set-multiple-error-messages-with-form-set-error
  */
-function form_set_error_multiple($name = NULL, $messages = '', $limit_validation_errors = NULL) {
+function form_set_error_multiple($name = NULL, $messages = '', $limit_validation_errors = NULL)
+{
   return form_set_error($name, implode('<br/>', $messages));
 }
 function oc_template_overwrites_oc_departments()
 {
-    $data = array();
-    $text = variable_get('fbs_search_departments', '');
-    
-    $tmp = explode(PHP_EOL,$text);
-    foreach($tmp as $branch)
-    {
-        $b = explode('|',$branch);
-        if(!empty($b[0]) && !empty($b[1]))
-        {
-            $data[str_replace(array("\n", "\r"), '',$b[1])] = str_replace(array("\n", "\r"), '',($b[0]));
-        }
+  $data = array();
+  $text = variable_get('fbs_search_departments', '');
+
+  $tmp = explode(PHP_EOL, $text);
+  foreach ($tmp as $branch) {
+    $b = explode('|', $branch);
+    if (!empty($b[0]) && !empty($b[1])) {
+      $data[str_replace(array("\n", "\r"), '', $b[1])] = str_replace(array("\n", "\r"), '', ($b[0]));
     }
-    return $data;
+  }
+  return $data;
 }
-function oc_template_overwrites_views_post_execute(&$view) {
+function oc_template_overwrites_views_post_execute(&$view)
+{
   if ($view->name == 'netmedier') {
     foreach ($view->result as $result) {
       // Replace all empty fields with the dash '-' character.
-      if(!empty($result->field_field_se_online)) {
+      if (!empty($result->field_field_se_online)) {
         $result->field_field_se_online[0]['rendered']['#element']['url'] = urldecode($result->field_field_se_online[0]['raw']['url']);
         $result->field_field_se_online[0]['rendered']['#element']['display_url'] = urldecode($result->field_field_se_online[0]['raw']['url']);
       }
     }
   }
 }
-function fynboots_url_outbound_alter(&$path, &$options, $original_path) {
+function fynboots_url_outbound_alter(&$path, &$options, $original_path)
+{
   global $user;
-    // If the original path contains a user id corresponding to a patron instead
-    // of me then assume that the user intend to access their own profile and
-    // redirect to /user/me. drupal_goto() will alter the outbound url before the
-    // redirect.
-    $script_url = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] ;
-    if(strpos($script_url,'admin/') !== false)
-    {
-     return;
+  // If the original path contains a user id corresponding to a patron instead
+  // of me then assume that the user intend to access their own profile and
+  // redirect to /user/me. drupal_goto() will alter the outbound url before the
+  // redirect.
+  $script_url = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+  if (strpos($script_url, 'admin/') !== false) {
+    return;
+  }
+  $tmp = $script_url;
+  $return = preg_match('/^\/user\/(\d+)\/?(.*)$/', $tmp, $matches);
+  if ($return) {
+    if (isset($matches[2])) {
+      $script_url = "user/me" . $matches[2];
+      drupal_goto("user/me/" . $matches[2]);
+    } else {
+      $script_url = "user/me";
+      drupal_goto("user/me");
     }
-    $tmp = $script_url;
-    $return = preg_match('/^\/user\/(\d+)\/?(.*)$/', $tmp , $matches);
-    if ($return) {
-      if(isset($matches[2]))
-      {
-        $script_url = "user/me" . $matches[2];
-        drupal_goto("user/me/". $matches[2]);
-      }
-      else{
-        $script_url = "user/me";
-        drupal_goto("user/me");
-      }
-        
-    }
+
+  }
   global $user;
   if (preg_match('/^user\/(\d+)\/?(.*)$/', $path, $matches)) {
     // To allow site administrators to edit other user they have to be filter
@@ -638,24 +608,24 @@ function fynboots_url_outbound_alter(&$path, &$options, $original_path) {
     $path = 'user/me';
   }
 }
-function oc_template_overwrites_url_inbound_alter(&$path, $original_path, $path_language) {
-$script_url = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] ;
-//  exit(1);
-if(strpos($script_url,'admin/') !== false)
+function oc_template_overwrites_url_inbound_alter(&$path, $original_path, $path_language)
 {
- return;
-}
-if (preg_match('/^user\/me\/{0,1}(.*)$/', $path, $matches)) {
-  global $user;
-  $uid = user_is_logged_in() ? $user->uid : 0;
+  $script_url = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+  //  exit(1);
+  if (strpos($script_url, 'admin/') !== false) {
+    return;
+  }
+  if (preg_match('/^user\/me\/{0,1}(.*)$/', $path, $matches)) {
+    global $user;
+    $uid = user_is_logged_in() ? $user->uid : 0;
 
-  // Only change the link if the user is logged in. This will show the url
-  // "/user/me/status" with page not found and not "/user/0/status".
-  if ($uid) {
-    $path = "user/" . $uid;
-    if (isset($matches[1])) {
-      $path .= '/' . $matches[1];
+    // Only change the link if the user is logged in. This will show the url
+    // "/user/me/status" with page not found and not "/user/0/status".
+    if ($uid) {
+      $path = "user/" . $uid;
+      if (isset($matches[1])) {
+        $path .= '/' . $matches[1];
+      }
     }
   }
-}
 }
