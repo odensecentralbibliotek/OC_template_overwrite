@@ -17,5 +17,5 @@ jQuery(document).ready(function () {
       : Drupal.settings.oc_template_overwrites.holdMin;
   jQuery(
     "#edit-profile-provider-fbs-field-fbs-on-hold-und-0-from-datepicker-popup-0"
-  ).datepicker({ minDate: minDate });
+  ).datepicker({ minDate: minDate, dateFormat: "dd-mm-yy" });
 });
